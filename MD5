@@ -1,4 +1,4 @@
-940558f34954d66c8a481fd328044f54 *DESCRIPTION
+334f1ccdfe3231e8f4c2714e8b57df4f *DESCRIPTION
 e0add1997c8f44175eebcec095fc9c4d *NAMESPACE
 c794b20345227189e4e749dc99fa7994 *R/0_sim.R
 77567bf2e75de6c1cb336cff7163cf44 *R/ApproxBayesian.R
@@ -21,9 +21,9 @@ b32389d334dd9c372ff8ec59852e1b05 *R/beed.R
 69c05edc9778299ce3b479c3e9e3d507 *R/loglikelihood.R
 856cf8c1ee14ce846bbd0a6c6991358e *R/plots.R
 229a6796d5bc0e05ab56445a9a4c5a81 *R/prior.R
-4167d244d9b78144e2db5c98574c0453 *data/MilanPollution.rda
-7acd1692d91486abbb4fd074ad16e9dc *data/Wind.rda
-b972ca27f8587ea0f371910dc5055e5a *data/pollution.rda
+66e7d3b1aa3efcbe25732a70920c1f3b *data/MilanPollution.rda
+324e6c68666c9f0c8052288a5e044c46 *data/Wind.rda
+22da0901ac38d62db3502a8e48280c00 *data/pollution.rda
 f5164c49f243ed709f8c005d1d84a1cc *man/AngDensPlot.Rd
 a43329bdd528131f8edc7f728d285348 *man/ExtQset.Rd
 e4b69d64193b4948a349f53b43da9624 *man/MilanPollution.Rd
@@ -61,7 +61,7 @@ b96f1818a3aadf33cea32889f979d7c7 *src/ExtremalDep_init.c
 faabab3f3af7676e01cc8d1df21e38db *src/Makevars
 35f38914545e80db59bec0fe0429750a *src/cubature.c
 2c786fdbb1a2a85e61af910869be6660 *src/cubature.h
-5dd899385e3150f2aeed8abe2d1ebabe *src/dependence.c
-1d5603b46c3d124de2ee3bbfff1a63aa *src/distributions.c
+8a62d96295a06d5b8c4147770ae44df7 *src/dependence.c
+2a1a06993ec1dc0f46a7a19167e854ce *src/distributions.c
 a9f766103922f19813b10b28c2b6e4c0 *src/likelihood.c
 182b6597de81f77db468f36df9b95183 *src/rcubature.c

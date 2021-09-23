@@ -4,8 +4,8 @@ export(alik, AngDensPlot, angular, beed.boot, beed.confband, beed, chi.bsn, chi.
 	pk.extst, posteriorMCMC, prior, proposal, r_extr_mod,
 	bbeed, returns, summary.bbeed, UniExtQ, ExtQset, ellipse)
 
-S3method(summary, bbeed)
-S3method(plot, bbeed)
+S3method(summary, "bbeed")
+S3method(plot, "bbeed")
 
 useDynLib(ExtremalDep, .registration = TRUE)
 
@@ -29,6 +29,5 @@ importFrom("gtools", "permutations")
 importFrom("nloptr", "nloptr")
 importFrom("utils", "setTxtProgressBar", "txtProgressBar", "tail")
 importFrom("mvtnorm", "rmvnorm", "rmvt")
-importFrom("rlist", "list.append")
 importFrom("fda", "fbplot")
 

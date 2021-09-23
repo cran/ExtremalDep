@@ -35,3 +35,4 @@ adaptIntegrate <-
     names(result) <- c("integral", "error", "functionEvaluations", "returnCode")
     result
   }
+

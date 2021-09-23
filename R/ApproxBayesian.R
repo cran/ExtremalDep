@@ -390,6 +390,7 @@ posteriorMCMC <- function (
     start.time <- proc.time()
     p <- ncol(dat)
     if (is.null(par.start)) {
+        condit <- -Inf
         while(!is.finite(condit)){
             par.start <- prior(model, type = "r", n = 1, Hpar = Hpar, dimData = p)
 			condit1 <- dens(x = dat, model=model, par = par.start, c=c, log = TRUE,  vectorial = FALSE)

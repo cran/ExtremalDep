@@ -76,3 +76,4 @@ labels=c(expression(w[1]),expression(w[3]),expression(w[2])),cex.dat=1, cex.lab=
 	if(contour==TRUE){ contour(x1,x2, matrix(equi, nrow=length(x1), ncol=length(x2)),levels=deciles, 
                              labels=round(deciles,3), labcex=cex.cont, nlevels=15,add=TRUE)}
 }
+

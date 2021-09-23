@@ -73,3 +73,4 @@ alik <- function(data, model, parastart, c=NULL, trace=0, sig=3){
 		
 	return(list(par=round(param.est,sig), LL=round(LogLik,sig), TIC=round(TIC,sig), SE=round(SE,sig) ))
 }
+

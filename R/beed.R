@@ -396,3 +396,4 @@ simplex <- function(d, n=50, a=0, b=1){
     return(as.matrix(x))
   }
 }
+

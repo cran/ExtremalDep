@@ -44,7 +44,7 @@ chi.bsn <- function(u, corr=0, shape=rep(0,2), tail="upper"){
 	}	
 
 }
-#
+
 pk.extst <- function(x, param=c(rep(0,choose(length(x),2)),rep(0,length(x)),1)){
 	
 	bivpkst <- function(x,scale, shape, df){
@@ -70,4 +70,3 @@ pk.extst <- function(x, param=c(rep(0,choose(length(x),2)),rep(0,length(x)),1)){
 	}
 }
 
-#

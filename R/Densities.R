@@ -26,7 +26,7 @@ dens <- function(x=rbind(c(0.1,0.3,0.6),c(0.1,0.2,0.7)), model="Pairwise", par=c
 # Model defined for a minimum of three dimensions 
 
 dens_pb <- function (x, b, alpha, log, vectorial){
-	if(any(b<=0) || b<=0){return(1e-300)}
+	if(any(b<=0)){return(1e-300)}
 	hij<-function(wi,wj,bij,alpha,p){
 		wij=wi+wj;
 		return(wij^(2*alpha-1)*(1-wij)^(alpha*(p-2)-p+2)*gamma(2*bij)/gamma(bij)^2*(wi/wij)^(bij-1)*(wj/wij)^(bij-1))

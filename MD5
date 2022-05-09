@@ -1,5 +1,5 @@
-aeb39c768e29c3c6a201f4ff748dafe1 *DESCRIPTION
-982776fd947bf4bf1354a693fb98655e *NAMESPACE
+c9f56ff9771bd4fa2be719beb9b1225b *DESCRIPTION
+dcce778daac6ab92b2fea4875823b561 *NAMESPACE
 c794b20345227189e4e749dc99fa7994 *R/0_sim.R
 174deb2f98a7097a22c0568ba5d4e8a3 *R/ApproxBayesian.R
 f892574197bcfd7f20f96e11c0e1d64a *R/ApproxLikelihood.R
@@ -11,7 +11,7 @@ c8f5396de080f8085a14043545a74da7 *R/Densities.R
 d53cdf26344fd3afb42cb1830b563906 *R/Distributions_extr_mod.R
 9afd8f2592591f67601b624c4f27d31a *R/ExtQset.R
 0a869478d16b7a81258044ce7c3d19cc *R/ExtremalDep.R
-b3ecebd3a131e3ff7c6ef19688c5ed49 *R/Madogram.R
+a0a436507666e24bc02d482e52424ed4 *R/Madogram.R
 7de0b93e339a96e0f106ed5c6357a3c0 *R/PlotDens3d.R
 499891b37654e21c5732ae19068d101c *R/Qsets.R
 2291341d761c9bacf184157ca5ddbcbc *R/UnivExtremeQ.R
@@ -21,9 +21,9 @@ fc9687b73fe73ab7e12e50221a0f48f4 *R/adaptIntegrate.R
 69c05edc9778299ce3b479c3e9e3d507 *R/loglikelihood.R
 856cf8c1ee14ce846bbd0a6c6991358e *R/plots.R
 229a6796d5bc0e05ab56445a9a4c5a81 *R/prior.R
-d76640bfdaaf391c46205ad67f2b2f02 *data/MilanPollution.rda
-ae3403066ea5cc12ab19a8a6f02b8ec1 *data/Wind.rda
-869c1360ec03d8a8cab386c740d6c43d *data/pollution.rda
+3f77c5ce071f7db857732b04981dd948 *data/MilanPollution.rda
+a303fc276f0d38bda005eda7c55c5bbe *data/Wind.rda
+e9e0f560501dd66797f25bb4bc8c478f *data/pollution.rda
 83ef4942484ec50f9b06f7ce87cf197e *man/AngDensPlot.Rd
 b76b473eaa244a408770f3fba59dbdda *man/ExtQset.Rd
 e4b69d64193b4948a349f53b43da9624 *man/MilanPollution.Rd
@@ -57,10 +57,11 @@ d0ad7cdb60b60af6dd0b13111b47f0b9 *man/prior.Rd
 e9be077fff4254c688d11d0bae846dd7 *man/r_extr_mod.Rd
 da4cf3ba1d28bfebb5e708d5605cf970 *man/returns.Rd
 5c23b489f7074d5438351f864d858d5a *man/summary.bbeed.Rd
-b96f1818a3aadf33cea32889f979d7c7 *src/ExtremalDep_init.c
+463a868903e196baac81032094439ae3 *src/CompRandFld.c
+66a4fa4469f9a4c605ec067f36321784 *src/ExtremalDep_init.c
 faabab3f3af7676e01cc8d1df21e38db *src/Makevars
 35f38914545e80db59bec0fe0429750a *src/cubature.c
-2c786fdbb1a2a85e61af910869be6660 *src/cubature.h
+a79986472f1ecda8d2fb81e0b3418a94 *src/cubature.h
 8a62d96295a06d5b8c4147770ae44df7 *src/dependence.c
 2a1a06993ec1dc0f46a7a19167e854ce *src/distributions.c
 a9f766103922f19813b10b28c2b6e4c0 *src/likelihood.c

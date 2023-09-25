@@ -54,7 +54,6 @@
 
 \examples{
 \donttest{
-
 x <- simplex(2)
 data <- evd::rbvevd(50, dep = 0.4, model = "log", mar1 = c(1,1,1))
 

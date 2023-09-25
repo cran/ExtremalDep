@@ -56,7 +56,7 @@ ExtQ(P=NULL, method="Frequentist", pU=NULL,
 ### Example - Pollution levels in Milan, Italy ###
 ##################################################
 
-if(interactive()){
+\dontrun{
 
 data(MilanPollution)
 

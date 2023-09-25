@@ -1,6 +1,5 @@
 \name{heat}
 \alias{heat}
-\alias{geogmel}
 \alias{heatdata}
 \alias{locgrid}
 \alias{mellat}
@@ -25,7 +24,7 @@
   
   Standardisation to unit Frechet is performed as in Beranger et al. (2021) by fitting the GEV distribution marginally using unconstrained location and shape parameters and the shape parameter to be a linear function of eastings and northings in 100 kilometre units. The resulting estimates are given in the objects \code{locgrid}, \code{scalegrid} and \code{shapegrid}, which are \eqn{10*9}{10*9} matrices.
   
-  Details about the study region are given in \code{geogmel}, \code{mellat} and \code{mellon}. \code{geogmel} is a large SpatialPolygonsDataFrame of class s4 that was obtained using the \code{sp} package. \code{mellat} and \code{mellon} are vectors of length \eqn{10}{10} and \eqn{11}{11} which give the latitude and longitude coordinates of the grid.
+  Details about the study region are given in \code{mellat} and \code{mellon}, vectors of length \eqn{10}{10} and \eqn{11}{11} which give the latitude and longitude coordinates of the grid.
 }
 
 \references{
@@ -35,17 +34,8 @@
 }
 
 \examples{
-###############################
-### Plot the study region   ###
-### using the rgeos library ###
-###############################
-
-if(interactive()){  
-
-plot(rgeos::gSimplify(geogmel, 0.01), lwd=1, col=grey(0.75))
+image(x=mellon, y=mellat, z=locgrid)
 points(heatdata$sitesLLO, pch=16)
-
-}
 }
 
 \keyword{datasets}

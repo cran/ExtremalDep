@@ -17,6 +17,10 @@ diagnostics(mcmc)
   When \code{mcmc} is the output of \code{\link{fExtDep.np}}, then this corresponds to an estimation of the dependence structure following the procedure given in Algorithm 1 of Beranger et al. (2021). If the margins are jointly estimated with the dependence (step 1 and 2 of the algorithm) then \code{diagnostics} provides trace plots of the corresponding scaling parameters (\eqn{\tau_1,\tau_2}{\tau_1,\tau_2}) and acceptance probabilities. For the dependence structure (step 3 of the algorithm), a trace plot of the polynomial order \eqn{\kappa}{\kappa} is given with the associated acceptance probability.
 }
 
+\value{
+ a graph of traceplots of the scaling parameter from the proposal distribution of the adaptive MCMC scheme and the associated acceptance probability.
+}
+
 \author{
 	Simone Padoan, \email{simone.padoan@unibocconi.it},
 	\url{https://faculty.unibocconi.it/simonepadoan/};
@@ -38,7 +42,7 @@ diagnostics(mcmc)
 ### Example - Pollution levels in Milan, Italy ###
 ##################################################
 	
-if(interactive()){
+\dontrun{
 
 ### Here we will only model the dependence structure	
 data(MilanPollution)

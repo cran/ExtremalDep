@@ -108,7 +108,7 @@ ret_marg <- returns(out=gbp_mar, summary.mcmc=gbp_mar_sum, y=y, plot=TRUE,
 ###             in Marcon et al. (2016, Figure 1)     ###
 #########################################################
 
-if(interactive()){
+\dontrun{
 
 set.seed(1890)
 data <- evd::rbvevd(n=100, dep=0.6, asy=c(0.8,0.3), model="alog", mar1=c(1,1,1))

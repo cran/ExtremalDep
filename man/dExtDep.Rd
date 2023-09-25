@@ -104,8 +104,9 @@ dExtDep(x=rbind(c(0.1,0.3,0.3,0.3),c(0.1,0.2,0.3,0.4)), method="Parametric",
 dExtDep(x=c(1.2,2.3), method="Parametric", model="EST", par=c(0.6,1,2,3), angular=FALSE, log=TRUE)
 
 # Example of non-parametric angular density
-par <- ExtremalDep:::rcoef(k=6, pm=list(p0=0.05, p1=0.1))
-dExtDep(x=rbind(c(0.1,0.9),c(0.2,0.8)), method="NonParametric", par=par$beta)
+beta <- c(1.0000000, 0.8714286, 0.7671560, 0.7569398, 
+          0.7771908, 0.8031573, 0.8857143, 1.0000000)
+dExtDep(x=rbind(c(0.1,0.9),c(0.2,0.8)), method="NonParametric", par=beta)
 
 }
 

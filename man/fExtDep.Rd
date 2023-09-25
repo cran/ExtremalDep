@@ -110,13 +110,13 @@ fExtDep(method="PPP", data, model, par.start = NULL,
 
 # Example using the Poisson Point Proce Process appraoch
 data(pollution)
-if (interactive()){
+\donttest{
   f.hr <- fExtDep(method="PPP", data=PNS, model="HR", 
                   par.start = rep(0.5, 3), trace=2)
 }
 
 # Example using the pairwise composite (full) likelihood
-if (interactive()){
+\donttest{
   set.seed(1)
   data <- rExtDep(n=300, model="ET", par=c(0.6,3))
   f.et <- fExtDep(method="Composite", data=data, model="ET", 

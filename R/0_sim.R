@@ -96,7 +96,7 @@ simData=function(n){
     ret$rez = cbind(X1, X2)
     ret$L = L}
   
-  if(L<n){print('try again :-)')}
+  if(L<n){message('try again :-)')}
   ret}
 
 

@@ -136,7 +136,7 @@ When \code{method="Empirical"}, the list includes:
 # Default negative binomial prior on polynomial order
 # Quadratic relationship between location and max temperature
 
-if(interactive()){
+\dontrun{
   data(MilanPollution)
   data <- Milan.winter[,c("NO2", "SO2", "MaxTemp")]
   data <- data[complete.cases(data),]

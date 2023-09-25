@@ -69,7 +69,7 @@ rExtDepSpat(n, coord, model="SCH", cov.mod = "whitmat", grid = FALSE,
 \seealso{\code{\link{fExtDepSpat}} }
 
 \examples{
-if(interactive()){
+\donttest{
 # Generate some locations
 set.seed(1)
 lat <- lon <- seq(from=-5, to=5, length=20)

@@ -39,6 +39,10 @@ plot_ExtDep(object="angular", model, par, log=TRUE, data=NULL, contour=TRUE,
   When contours are displayed, levels are chosen to be the deciles. 
 }
 
+\value{
+  A graph depending on argument \code{object}.
+}
+
 \author{
 	Simone Padoan, \email{simone.padoan@unibocconi.it},
 	\url{https://faculty.unibocconi.it/simonepadoan/};
@@ -57,7 +61,7 @@ data(pollution)
 ### Trivariate Husler-Reiss ###
 ###############################
 
-if(interactive()){
+\donttest{
   f.hr <- fExtDep(method="PPP", data=PNS, model="HR", par.start=rep(1,3))
 
   plot_ExtDep(object="angular", model="HR", par=f.hr$par, data=PNS, 
@@ -73,7 +77,7 @@ if(interactive()){
 ### Bivariate Husler-Reiss ###
 ###############################            
 
-if(interactive()){
+\donttest{
   PN <- na.omit(Leeds.frechet[,1:2])
   PN <- cbind(PN, rowSums(PN))
   PN <- PN[order(PN[,3], decreasing = TRUE)[1:100],]

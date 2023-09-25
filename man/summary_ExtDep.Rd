@@ -63,7 +63,7 @@ summary_ExtDep(object, mcmc, burn, cred=0.95, plot=FALSE, ...)
 ### Example - Pollution levels in Milan, Italy ###
 ####################################################
 	
-if(interactive()){
+\dontrun{
 
 ### Here we will only model the dependence structure	
 data(MilanPollution)

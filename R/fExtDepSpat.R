@@ -1742,7 +1742,6 @@ makeSymmetric <- function(mat)
   if(!isSymmetric(mat))
     mat[lower.tri(mat)] <- t(mat)[lower.tri(mat)]
   if(any(diag(mat) <= 0)) {
-    print(diag(mat))
     stop("non-positive diagonal in makeSymmetric")
   }
   mat

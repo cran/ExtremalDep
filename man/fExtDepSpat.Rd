@@ -80,7 +80,7 @@ z <- rExtDepSpat(Ny, sites, model="ET", cov.mod="powexp", DoF=1,
 # Fit the extremal-t using the full Stephenson-Tawn likelihood
 args1 <- list(Nmax=50L, Nmin=5L, eps=0.001, logeps=FALSE)
 args2 <- list(Nmax=500L, Nmin=50L, eps=0.001, logeps=TRUE)
-if(interactive()){
+\dontrun{
 fit1 <- fExtDepSpat(model="ET", z=z$vals, sites=sites, hit=z$hits,
                     par0=c(3,1,1), parallel=TRUE, ncores=6,
                     args1=args1, args2=args2, control = list(trace=0))

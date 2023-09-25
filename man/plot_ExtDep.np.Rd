@@ -52,6 +52,10 @@ plot_ExtDep.np(out, type, summary.mcmc, burn, y, probs,
 	If \code{type="Qsets"}, extreme quantile regions are computed according to the methodology developped in Beranger et al. (2021).
 }
 
+\value{
+ a graph depending on argument \code{type}.
+}
+
 \author{
 	Simone Padoan, \email{simone.padoan@unibocconi.it},
 	\url{https://faculty.unibocconi.it/simonepadoan/};
@@ -109,7 +113,7 @@ plot_ExtDep.np(out=SP_mle, type="summary")
 ### Example 2 - Pollution levels in Milan, Italy ###
 ####################################################
 	
-if(interactive()){
+\dontrun{
 
 ### Here we will only model the dependence structure	
 data(MilanPollution)

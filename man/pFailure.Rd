@@ -76,7 +76,7 @@ extdata <- data_uf[rdata>=r0,]
 SP_mle <- fExtDep.np(method="Frequentist", data=extdata, k0=10, 
                      type="maxima")
 
-if(interactive()){
+\donttest{
   pF <- pFailure(n=50000, beta=SP_mle$Ahat$beta,
                  u1=seq(from=19, to=28, length=200), mar1=pars.WS,
                  u2=seq(from=40, to=60, length=200), mar2=pars.DP, 

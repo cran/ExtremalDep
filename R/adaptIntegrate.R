@@ -20,8 +20,7 @@ adaptIntegrate <-
     f.check <- function(x) {
       x <- f(x,...)
       if(!is.numeric(x) || length(x) != fDim) {
-        print("adaptIntegrate: Error in evaluation function f(x) for x=")
-        print(x)
+        message(paste("adaptIntegrate: Error in evaluation function f(x) for x=",x,sep=""))
         stop("adaptIntegrate: Result f(x) is not numeric or has wrong dimension")
       }
       as.double(x)

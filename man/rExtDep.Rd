@@ -49,7 +49,7 @@ rExtDep(n, model, par, angular=FALSE, mar=c(1,1,1), num, threshold,
 \seealso{\code{\link{dExtDep}}, \code{\link{pExtDep}}, \code{\link{fExtDep}}, \code{\link{fExtDep.np}} }
 
 \examples{
-if(interactive()){
+\donttest{
 
 # Example using the trivariate Husler-Reiss
 set.seed(1)
@@ -57,13 +57,14 @@ data <- rExtDep(n=10, model="HR", par=c(2,3,3))
 
 # Example using the semi-parammetric generator of maxima
 set.seed(2)
-par <- ExtremalDep:::rcoef(k=6, pm=list(p0=0.05, p1=0.1))
-data <- rExtDep(n=10, model="semi.bvevd", par=par$beta, 
+beta <- c(1.0000000, 0.8714286, 0.7671560, 0.7569398, 
+          0.7771908, 0.8031573, 0.8857143, 1.0000000)
+data <- rExtDep(n=10, model="semi.bvevd", par=beta, 
                 mar=rbind(c(0.2, 1.5, 0.6),c(-0.5, 0.4, 0.9)))
 
 # Example using the semi-parammetric generator of maxima
 set.seed(3)
-data <- rExtDep(n=10, model="semi.bvexceed", par=par$beta, 
+data <- rExtDep(n=10, model="semi.bvexceed", par=beta, 
                 threshold=c(0.2, 0.4), exceed.type="and")
                 
 }                

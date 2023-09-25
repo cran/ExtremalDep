@@ -781,7 +781,14 @@ typedef struct {
 static void heap_resize(heap *h, unsigned nalloc)
 {
      h->nalloc = nalloc;
-     h->items = (heap_item *) realloc(h->items, sizeof(heap_item) * nalloc);
+     /* h->items = (heap_item *) realloc(h->items, sizeof(heap_item) * nalloc);*/
+     if (nalloc)
+         h->items = (heap_item *) realloc(h->items, sizeof(heap_item) * nalloc);
+     else {
+         /* BSD realloc does not free for a zero-sized reallocation */
+         free(h->items);
+         h->items = NULL;
+     }
 }
 
 static heap heap_alloc(unsigned nalloc, unsigned fdim)

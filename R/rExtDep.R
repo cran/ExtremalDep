@@ -90,7 +90,7 @@ rExtDep <- function(n, model, par, angular=FALSE, mar=c(1,1,1), num,
       }
       if(is.matrix(mar)){
         if(ncol(mar)!=3){stop("mar must have 3 columns")}
-        if(nrow(mar)!=d){stop(cat("mar must have ", d, " rows"))}
+        if(nrow(mar)!=d){stop(paste("mar must have ", d, " rows", sep=""))}
       }
       
       for(i in 1:d){

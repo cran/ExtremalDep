@@ -82,7 +82,7 @@ fit$est
 cov <- cbind(rep(1,nrow(Milan.winter)), Milan.winter$MaxTemp, 
              Milan.winter$MaxTemp^2)
 u <- quantile(Milan.winter$PM10, prob=0.9, type=3, na.rm=TRUE)
-if(interactive()){
+\donttest{
   fit2 <- fGEV(data=Milan.winter$PM10, par.start=c(50,0,0,20,1), 
                method="Bayesian", u=u, cov=cov, sig0=0.1, nsim=5e+4) 
 }

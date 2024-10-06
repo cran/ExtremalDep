@@ -398,7 +398,7 @@ dens_al <- function (x, alpha, beta, c, log, vectorial){
       hdens <- vector(length=nrow(data))
       
       if(c == 0){
-        hdens <- apply(data,1, function(x) interior_alm_3d(w=x, alpha=alpha, beta=beta))
+        hdens <- apply(data,1, function(x) interior_alm_2d(w=x, alpha=alpha, beta=beta))
       }else if(c>0){
         
         subs <- apply(data, 1, function(x) subset.c(x,c=c))

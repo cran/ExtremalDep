@@ -35,14 +35,14 @@ fGEV(data, par.start, method="Frequentist", u, cov,
 \value{
 	When \code{method="Frequentist"} the routine returns a list including the parameter estimates (\code{est}) and associated variance-covariance matrix (\code{varcov}) and standard errors (\code{stderr}).
 	When \code{method="Bayesian"} the routine returns a list including
-	\itemize{
-	\item{\code{param_post}}{the parameter posterior sample;}
-	\item{\code{accepted}}{a binary vector indicating which proposal was accepted;} 
-	\item{\code{straight.reject}}{a binary vector indicating which proposal were rejected straight away given that the proposal is a multivariate normal and there are conditions on the parameter values;}
-	\item{\code{nsim}}{the number of simulations in the algorithm;}
-	\item{\code{sig.vec}}{the vector of updated scaling parameter in the multivariate normal porposal distribution at each iteration;}
-	\item{\code{sig.restart}}{the value of the scaling parameter in the multivariate normal porposal distribution when the algorithm needs to restart;}
-	\item{\code{acc.vec}}{a vector of acceptance probabilities at each iteration.}
+	\describe{
+	\item{param_post:}{the parameter posterior sample;}
+	\item{accepted:}{a binary vector indicating which proposal was accepted;} 
+	\item{straight.reject:}{a binary vector indicating which proposal were rejected straight away given that the proposal is a multivariate normal and there are conditions on the parameter values;}
+	\item{nsim:}{the number of simulations in the algorithm;}
+	\item{sig.vec:}{the vector of updated scaling parameter in the multivariate normal porposal distribution at each iteration;}
+	\item{sig.restart:}{the value of the scaling parameter in the multivariate normal porposal distribution when the algorithm needs to restart;}
+	\item{acc.vec:}{a vector of acceptance probabilities at each iteration.}
 	}
 	
 }

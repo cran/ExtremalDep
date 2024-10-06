@@ -220,11 +220,11 @@ void R_smult(double *A, double *B, int *m, int *n, int *p, double *C)
 void R_qform(double *A, double *B, int *m, int *p, double *C)
 {
   double *C2;
-  C2 = (double *)Calloc(*m * *p * sizeof(double), double);
+  C2 = (double *)R_Calloc(*m * *p * sizeof(double), double);
 
   R_smult(A, B, m, p, p, C2);
   R_xmult(C2, A, m, m, p, C);
-  Free(C2);
+  R_Free(C2);
 }
 
 /* Calculates A %*% t(B) where A is m by p and B is n by p */

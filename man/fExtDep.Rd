@@ -55,30 +55,30 @@ fExtDep(method="PPP", data, model, par.start = NULL,
 \value{
 
   When \code{method == "PPP"} or \code{"Composite"}, a list is returned including
-  \itemize{
-    \item{\code{par}: }{The estimated parameters.}
-    \item{\code{LL}: }{The maximised log-likelihood.}
-    \item{\code{SE}: }{The standard errors.}
-    \item{\code{TIC}: }{The Takeuchi Information Criterion.}
+  \describe{
+    \item{par:}{The estimated parameters.}
+    \item{LL:}{The maximised log-likelihood.}
+    \item{SE:}{The standard errors.}
+    \item{TIC:}{The Takeuchi Information Criterion.}
   }
   
   When \code{method == "BayesianPPP"}, a list is returned including 
   
-  \itemize{
-  	\item{\code{stored.vales}: }{A \eqn{(Nsim-Nbin)*d}{(Nsim-Nbin)*d} matrix, where \eqn{d}{d} is the dimension of the parameter space}
-  	\item{\code{llh}: }{A vector of size \eqn{(Nsim-Nbin)}{(Nsim-Nbin)} containing the log-likelihoods evaluadted at each parameter
+  \describe{
+  	\item{stored.vales:}{A \eqn{(Nsim-Nbin)*d} matrix, where \eqn{d} is the dimension of the parameter space}
+  	\item{llh:}{A vector of size \eqn{(Nsim-Nbin)} containing the log-likelihoods evaluadted at each parameter
 		of the posterior sample.}
-	  \item{\code{lprior}: }{A vector of size \eqn{(Nsim-Nbin)}{(Nsim-Nbin)} containing the logarithm of the prior densities evaluated
+	  \item{lprior:}{A vector of size \eqn{(Nsim-Nbin)} containing the logarithm of the prior densities evaluated
 		at each parameter of the posterior sample.}
-		\item{\code{arguments}: }{The specifics of the algorithm.}
-	  \item{\code{elapsed}: }{The time elapsed, as given by \code{proc.time} between the start and end of the run.}
-	  \item{\code{Nsim}: }{The same as the passed argument.}
-	  \item{\code{Nbin}: }{Idem.}
-	  \item{\code{n.accept}: }{The total number of accepted proposals.}
-	  \item{\code{n.accept.kept}: }{The number of accepted proposals after the burn-in period. }
-	  \item{\code{emp.mean}: }{The estimated posterior parameters mean.}
-	  \item{\code{emp.sd}: }{The empirical posterior sample standard deviation.}
-	  \item{\code{BIC}: }{The Bayesian Information Criteria.}
+		\item{arguments:}{The specifics of the algorithm.}
+	  \item{elapsed:}{The time elapsed, as given by \code{proc.time} between the start and end of the run.}
+	  \item{Nsim:}{The same as the passed argument.}
+	  \item{Nbin:}{Idem.}
+	  \item{n.accept:}{The total number of accepted proposals.}
+	  \item{n.accept.kept:}{The number of accepted proposals after the burn-in period. }
+	  \item{emp.mean:}{The estimated posterior parameters mean.}
+	  \item{emp.sd:}{The empirical posterior sample standard deviation.}
+	  \item{BIC:}{The Bayesian Information Criteria.}
   }
               
 }

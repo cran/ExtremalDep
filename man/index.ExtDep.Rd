@@ -17,21 +17,21 @@ index.ExtDep(object, model, par, x, u)
 }
 
 \details{
-  The extremal coefficient is defined as \deqn{\theta = V(1,\ldots,1) = d \int_{W} \max_{j \in \left\{1, ..., d\right\} }(w_j) dH(w) = - \log G(1,\ldots,1),}{\theta = V(1,...,1) = d \int_{W} \max_{j \in {1, ..., d} }(w_j) dH(w) = - \log G(1,...,1),} where \eqn{W}{W} represents the unit simplex, \eqn{V}{V} is the exponent function and \eqn{G(\cdot)}{G(.)} the distribution function of a multivariate extreme value model. Bivariate and trivariate versions are available.
+  The extremal coefficient is defined as \deqn{\theta = V(1,\ldots,1) = d \int_{W} \max_{j \in \left\{1, ..., d\right\} }(w_j) dH(w) = - \log G(1,\ldots,1),}{\theta = V(1,...,1) = d \int_{W} \max_{j \in {1, ..., d} }(w_j) dH(w) = - \log G(1,...,1),} where \eqn{W} represents the unit simplex, \eqn{V} is the exponent function and \eqn{G(\cdot)}{G(.)} the distribution function of a multivariate extreme value model. Bivariate and trivariate versions are available.
   
-  The Pickands dependence function is defined as \eqn{A(x) = - \log G(1/x)}{A(x) = - \log G(1/x)} for \eqn{x}{x} in the bivariate/trivariate simplex (\eqn{W}{W}). 
+  The Pickands dependence function is defined as \eqn{A(x) = - \log G(1/x)}{A(x) = - \log G(1/x)} for \eqn{x}{x} in the bivariate/trivariate simplex (\eqn{W}). 
   
   The coefficient of upper tail dependence is defined as \deqn{\vartheta = R(1,\ldots,1) = d \int_{W} \min_{j \in \left\{1, ..., d\right\} }(w_j) dH(w).}{\vartheta = R(1,...,1) = d \int_{W} \min_{j \in {1, ..., d} }(w_j) dH(w).} In the bivariate case, using the inclusion-exclusion principle this reduces to \eqn{\vartheta =  2 + \log G(1,1) = 2 - V(1,1)}{\vartheta = 2 + \log G(1,1) = 2 - V(1,1)}.
   
-  For the skew-normal distribution, the lower tail dependence function is defined as in Bortot (2010). This is an approximation where the tail dependence is obtained in the limiting case where \code{u}{u} goes to eqn{1}{1}. The \code{par} argument should be a vector of length \eqn{3}{3} comprising of the correlation parameter, between \eqn{-1}{-1} and \eqn{1}{1} and two real-valued skewness parameters.
+  For the skew-normal distribution, the lower tail dependence function is defined as in Bortot (2010). This is an approximation where the tail dependence is obtained in the limiting case where \code{u} goes to \eqn{1}. The \code{par} argument should be a vector of length \eqn{3} comprising of the correlation parameter, between \eqn{-1} and \eqn{1} and two real-valued skewness parameters.
   
 }
 
 \value{
-  When \code{object="extremal"}, returns a value between \eqn{1}{1} and \eqn{d}{d} (\eqn{d=2,3}{d=2,3}). \cr
-  When \code{object="pickands"}, returns a value between \eqn{\max(x)}{\max(x)} and \eqn{1}{1}. \cr
-  When \code{object="upper.tail"}, returns a value between \eqn{0}{0} and \eqn{1}{1}. \cr
-  When \code{object="lower.tail"}, returns a value between \eqn{-1}{-1} and \eqn{1}{1}.
+  When \code{object="extremal"}, returns a value between \eqn{1} and \eqn{d} (\eqn{d=2,3}). \cr
+  When \code{object="pickands"}, returns a value between \eqn{\max(x)} and \eqn{1}. \cr
+  When \code{object="upper.tail"}, returns a value between \eqn{0} and \eqn{1}. \cr
+  When \code{object="lower.tail"}, returns a value between \eqn{-1} and \eqn{1}.
 }
 
 \author{

@@ -22,12 +22,12 @@ plot_ExtDep.np(out, type, summary.mcmc, burn, y, probs,
   \item{A_true}{A vector representing the true pickands dependence function evaluated at the grid points on the simplex given by \code{summary.mcmc$w}.}
   \item{h_true}{A vector representing the true angular density function evaluated at the grid points on the simplex given by \code{summary.mcmc$w}.}
   \item{est.out}{A list containing:
-    \itemize{
-      \item{\code{ghat}: }{a 3-row matrix giving the posterior summary for the estimate of the bound;}
-      \item{\code{Shat} and \code{Shat_post}: }{a matrix of the posterior and a 3-row matrix giving the posterior summary for the estimate of the basic set \eqn{S}{S};}
-      \item{\code{nuShat} and \code{nuShat_post}: }{a matrix of the posterior and a 3-row matrix giving the posterior summary for the estimate of the measure \eqn{\nu(S)}{\nu(S)};}
+    \describe{
+      \item{ghat:}{a 3-row matrix giving the posterior summary for the estimate of the bound;}
+      \item{Shat and Shat_post:}{a matrix of the posterior and a 3-row matrix giving the posterior summary for the estimate of the basic set \eqn{S};}
+      \item{nuShat and nuShat_post:}{a matrix of the posterior and a 3-row matrix giving the posterior summary for the estimate of the measure \eqn{\nu(S)};}
     }
-    Note that a posterior summary is made of its mean and \eqn{90\%}{90\%}credibility interval.
+    Note that a posterior summary is made of its mean and \eqn{90\%}credibility interval.
     
     Only required when using a Bayesian estimation method (\code{out$est=="Bayesian"}) and \code{type="Qsets"}.}
   \item{mar1, mar2}{Vectors of marginal GEV parameters. Required when \code{type="Qsets"} and either \code{out$method=="Bayesian"} if the marginal parameter weren't fitted or \code{"empirical"}.}
@@ -46,8 +46,8 @@ plot_ExtDep.np(out, type, summary.mcmc, burn, y, probs,
 	If \code{type="returns"}, a (contour) plot of the probabilities of exceedances for some threshold is returned. This corresponds to the output of the \code{returns} function. \cr
 	If \code{type="A"}, a plot of the estimated Pickands dependence function is drawn. If \code{A_true} is specified the plot includes the true Pickands dependence function and a functional boxplot for the estimated function.
 	If \code{type="h"}, a plot of the estimated angular density function is drawn. If \code{h_true} is specified the plot includes the true angular density and a functional boxplot for the estimated function.
-	If \code{type="pm"}, a plot of the prior against the posterior for the mass at \eqn{\{0\}}{\{0\}} is drawn.
-	If \code{type="k"}, a plot of the prior against the posterior for the polynomial degree \eqn{k}{k} is drawn.
+	If \code{type="pm"}, a plot of the prior against the posterior for the mass at \eqn{\{0\}} is drawn.
+	If \code{type="k"}, a plot of the prior against the posterior for the polynomial degree \eqn{k} is drawn.
 	If \code{type="summary"}, when the estimation was performed in a Bayesian framework then a 2 by 2 plot with types \code{"A"}, \code{"h"}, \code{"pm"} and \code{"k"} is returned. Otherwise a 1 by 2 plot with types \code{"A"} and \code{"h"} is returned.
 	If \code{type="Qsets"}, extreme quantile regions are computed according to the methodology developped in Beranger et al. (2021).
 }

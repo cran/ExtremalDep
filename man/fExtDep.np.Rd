@@ -40,7 +40,7 @@ fExtDep.np(method, data, cov1=NULL, cov2=NULL, u, mar.fit=TRUE,
 
 \details{
 When \code{method="Bayesian"}, the vector of hyper-parameters is provided in the argument \code{hyperparam}. It should include:
-\itemize{
+\describe{
 \item{If \code{prior.pm="unif"}}{ requires \code{hyperparam$a.unif} and \code{hyperparam$b.unif}.}
 \item{If \code{prior.pm="beta"}}{ requires \code{hyperparam$a.beta} and \code{hyperparam$b.beta}.}
 \item{If \code{prior.k="pois"}}{ requires \code{hyperparam$mu.pois}.}
@@ -55,47 +55,47 @@ When \code{method="Empirical"}, the empirical estimation procedure presented in 
 
 \value{
 Outputs take the form of list including:
-  \itemize{
-  \item{\code{method}: }{The argument.}
-  \item{\code{type}: } whether it is \code{"maxima"} or \code{"rawdata"} (in the broader sense that a threshold exceedance model was taken).
+  \describe{
+  \item{method:}{The argument.}
+  \item{type:}{whether it is \code{"maxima"} or \code{"rawdata"} (in the broader sense that a threshold exceedance model was taken).}
   }
 If \code{method="Bayesian"} the list also includes:
-  \itemize{
-  \item{\code{mar.fit}: }{The argument.}
-  \item{\code{pm}: }{The posterior sample of probability masses.}
-  \item{\code{eta}: }{The posterior sample for the coeficients of the Bernstein polynomial.}
-  \item{\code{k}: }{The posterior sample for the Bernstein polynoial order.}
-  \item{\code{accepted}: }{A binary vector indicating if the proposal was accepted.}
-  \item{\code{acc.vec}: }{A vector containing the acceptance probabilities for the dependence parameters at each iteration.}
-  \item{\code{prior}: }{A list containing \code{hyperparam}, \code{prior.pm} and \code{prior.k}.}
-  \item{\code{nsim}: }{The argument.}
-  \item{\code{data}: }{The argument.}
+  \describe{
+  \item{mar.fit:}{The argument.}
+  \item{pm:}{The posterior sample of probability masses.}
+  \item{eta:}{The posterior sample for the coeficients of the Bernstein polynomial.}
+  \item{k:}{The posterior sample for the Bernstein polynoial order.}
+  \item{accepted:}{A binary vector indicating if the proposal was accepted.}
+  \item{acc.vec:}{A vector containing the acceptance probabilities for the dependence parameters at each iteration.}
+  \item{prior:}{A list containing \code{hyperparam}, \code{prior.pm} and \code{prior.k}.}
+  \item{nsim:}{The argument.}
+  \item{data:}{The argument.}
   }
 In addition if the marginal parameters are estimated (\code{mar.fit=TRUE}):
-  \itemize{
-  \item{\code{cov1}, \code{cov2}: }{The arguments.}
-  \item{\code{accepted.mar}, \code{accepted.mar2}: }{Binary vectors indicating if the marginal proposals were accepted.}
-  \item{\code{straight.reject1}, \code{straight.reject2}: }{Binary vectors indicating if the marginal proposals were rejected straight away as not respecting existence conditions (proposal is multivariate normal).}
-  \item{\code{acc.vec1}, \code{acc.vec2}: }{Vectors containing the acceptance probabilities for the marginal parameters at each iteration.}
-  \item{\code{sig1.vec}, \code{sig2.vec}: }{Vectors containing the values of the scaling parameter in the marginal proposal distributions.}
+  \describe{
+  \item{cov1, cov2:}{The arguments.}
+  \item{accepted.mar, accepted.mar2:}{Binary vectors indicating if the marginal proposals were accepted.}
+  \item{straight.reject1, straight.reject2:}{Binary vectors indicating if the marginal proposals were rejected straight away as not respecting existence conditions (proposal is multivariate normal).}
+  \item{acc.vec1, acc.vec2:}{Vectors containing the acceptance probabilities for the marginal parameters at each iteration.}
+  \item{sig1.vec, sig2.vec:}{Vectors containing the values of the scaling parameter in the marginal proposal distributions.}
   }
 Finally, if the argument \code{u} is provided, the list also contains:
-  \itemize{
-  \item{\code{threshold}: }{A bivariate vector indicating the threshold level for both margins.}
-  \item{\code{kn}: }{The empirical estimate of the probability of being greater than the threshold.}
+  \describe{
+  \item{threshold:}{A bivariate vector indicating the threshold level for both margins.}
+  \item{kn:}{The empirical estimate of the probability of being greater than the threshold.}
   }
   
 When \code{method="Frequentist"}, the list includes:  
   
 When \code{method="Empirical"}, the list includes:
-  \itemize{
-  \item{\code{hhat}: }{An estimate of the angular density.}
-  \item{\code{Hhat}: }{An estimate of the angular measure.}
-  \item{\code{p0}, \code{p1}: }{The estimates of the probability mass at 0 and 1.}
-  \item{\code{Ahat}: }{An estimate of the PIckands dependence function.}
-  \item{\code{w}: }{A sequence of value on the bivariate unit simplex.}
-  \item{\code{q}: }{A real in \eqn{[0,1]}{[0,1]} indicating the quantile associated with the threshold \code{u}. Takes value \code{NULL} if \code{type="maxima"}.}
-  \item{\code{data}: }{The data on the unit Frechet scale (empirical transformation) if \code{type="rawdata"} and \code{mar.fit=TRUE}. Data on the original scale otherwise.}
+  \describe{
+  \item{hhat:}{An estimate of the angular density.}
+  \item{Hhat:}{An estimate of the angular measure.}
+  \item{p0, p1:}{The estimates of the probability mass at 0 and 1.}
+  \item{Ahat:}{An estimate of the PIckands dependence function.}
+  \item{w:}{A sequence of value on the bivariate unit simplex.}
+  \item{q:}{A real in \eqn{[0,1]}{[0,1]} indicating the quantile associated with the threshold \code{u}. Takes value \code{NULL} if \code{type="maxima"}.}
+  \item{data:}{The data on the unit Frechet scale (empirical transformation) if \code{type="rawdata"} and \code{mar.fit=TRUE}. Data on the original scale otherwise.}
   }
 
 }

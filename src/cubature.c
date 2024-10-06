@@ -128,7 +128,7 @@ static hypercube make_hypercube(unsigned dim, const double *center, const double
      hypercube h;
      h.dim = dim;
 #ifdef R_PACKAGE
-     h.data = (double *) Calloc(dim * 2, double);
+     h.data = (double *) R_Calloc(dim * 2, double);
 #else
      h.data = (double *) malloc(sizeof(double) * dim * 2);
 #endif
@@ -155,7 +155,7 @@ static hypercube make_hypercube_range(unsigned dim, const double *xmin, const do
 static void destroy_hypercube(hypercube *h)
 {
 #ifdef R_PACKAGE
-     Free(h->data);
+     R_Free(h->data);
 #else
      free(h->data);
 #endif
@@ -177,7 +177,7 @@ static region make_region(const hypercube *h, unsigned fdim)
      R.splitDim = 0;
      R.fdim = fdim;
 #ifdef R_PACKAGE
-     R.ee = (esterr *) Calloc(fdim, esterr);
+     R.ee = (esterr *) R_Calloc(fdim, esterr);
 #else
      R.ee = (esterr *) malloc(sizeof(esterr) * fdim);
 #endif
@@ -188,7 +188,7 @@ static void destroy_region(region *R)
 {
      destroy_hypercube(&R->h);
 #ifdef R_PACKAGE
-     Free(R->ee);
+     R_Free(R->ee);
 #else
      free(R->ee);
 #endif
@@ -206,7 +206,7 @@ static void cut_region(region *R, region *R2)
      R->h.data[d] -= R->h.data[d + dim];
      R2->h.data[d] += R->h.data[d + dim];
 #ifdef R_PACKAGE
-     R2->ee = (esterr *) Calloc(R2->fdim, esterr);
+     R2->ee = (esterr *) R_Calloc(R2->fdim, esterr);
 #else
      R2->ee = (esterr *) malloc(sizeof(esterr) * R2->fdim);
 #endif
@@ -226,7 +226,7 @@ static void destroy_rule(rule *r)
 {
      if (r->destroy) r->destroy(r);
 #ifdef R_PACKAGE
-     Free(r);
+     R_Free(r);
 #else
      free(r);
 #endif
@@ -301,7 +301,7 @@ static void evalR_Rfs(double *sum, unsigned fdim, integrand f, void *fdata, unsi
 	  p[i] = c[i] + r[i];
 
 #ifdef R_PACKAGE
-     val = (double *) Calloc(fdim, double);
+     val = (double *) R_Calloc(fdim, double);
 #else
      val = (double *) malloc(sizeof(double) * fdim);
 #endif
@@ -325,7 +325,7 @@ static void evalR_Rfs(double *sum, unsigned fdim, integrand f, void *fdata, unsi
 	  p[d] = (signs & mask) ? c[d] - r[d] : c[d] + r[d];
      }
 #ifdef R_PACKAGE
-     Free(val);
+     R_Free(val);
 #else
      free(val);
 #endif
@@ -337,7 +337,7 @@ static void evalRR0_0fs(double *sum, unsigned fdim, integrand f, void *fdata, un
      double *val;
 
 #ifdef R_PACKAGE
-     val = (double *) Calloc(fdim, double);
+     val = (double *) R_Calloc(fdim, double);
 #else
      val = (double *) malloc(sizeof(double) * fdim);
 #endif
@@ -365,7 +365,7 @@ static void evalRR0_0fs(double *sum, unsigned fdim, integrand f, void *fdata, un
 	  p[i] = c[i];		/* Done with i -> Restore p[i] */
      }
 #ifdef R_PACKAGE
-     Free(val);
+     R_Free(val);
 #else
      free(val);
 #endif
@@ -379,7 +379,7 @@ static unsigned evalR0_0fs4d(unsigned fdim, integrand f, void *fdata, unsigned d
      double ratio = r1[0] / r2[0];
 
 #ifdef R_PACKAGE
-     val = (double *) Calloc(fdim * 3, double);
+     val = (double *) R_Calloc(fdim * 3, double);
 #else
      val = (double *) malloc(sizeof(double) * fdim * 3);
 #endif
@@ -429,7 +429,7 @@ static unsigned evalR0_0fs4d(unsigned fdim, integrand f, void *fdata, unsigned d
 	  }
      }
 #ifdef R_PACKAGE
-     Free(val);
+     R_Free(val);
 #else
      free(val);
 #endif
@@ -474,7 +474,7 @@ static void destroy_rule75genzmalik(rule *r_)
 {
      rule75genzmalik *r = (rule75genzmalik *) r_;
 #ifdef R_PACKAGE
-     Free(r->p);
+     R_Free(r->p);
 #else
      free(r->p);
 #endif
@@ -498,7 +498,7 @@ static unsigned rule75genzmalik_evalError(rule *r_, unsigned fdim, integrand f, 
      const double *halfwidth = h->data + dim;
 
 #ifdef R_PACKAGE
-     sums = (double *) Calloc(fdim * 5, double);
+     sums = (double *) R_Calloc(fdim * 5, double);
 #else
      sums = (double *) malloc(sizeof(double) * fdim * 5);
 #endif
@@ -541,7 +541,7 @@ static unsigned rule75genzmalik_evalError(rule *r_, unsigned fdim, integrand f, 
 
     
 #ifdef R_PACKAGE
-     Free(sums);
+     R_Free(sums);
 #else
      free(sums);
 #endif
@@ -562,7 +562,7 @@ static rule *make_rule75genzmalik(unsigned dim)
      if (dim >= sizeof(unsigned) * 8) return 0;
 
 #ifdef R_PACKAGE
-     r = (rule75genzmalik *) Calloc(1, rule75genzmalik);
+     r = (rule75genzmalik *) R_Calloc(1, rule75genzmalik);
 #else
      r = (rule75genzmalik *) malloc(sizeof(rule75genzmalik));
 #endif
@@ -579,8 +579,8 @@ static rule *make_rule75genzmalik(unsigned dim)
      r->weightE3 = real(265 - 100 * to_int(dim)) / real(1458);
 
 #ifdef R_PACKAGE
-     r->p = (double *) Calloc(dim * 3, double);
-     if (!r->p) { Free(r); return 0; }
+     r->p = (double *) R_Calloc(dim * 3, double);
+     if (!r->p) { R_Free(r); return 0; }
 #else
      r->p = (double *) malloc(sizeof(double) * dim * 3);
      if (!r->p) { free(r); return 0; }
@@ -646,7 +646,7 @@ static unsigned rule15gauss_evalError(rule *r,
      double *result_gauss, *result_kronrod, *result_abs;
      unsigned j, k;
 #ifdef R_PACKAGE
-     double *scratch = (double *) Calloc(fdim * 19, double);
+     double *scratch = (double *) R_Calloc(fdim * 19, double);
 #else
      double *scratch = (double *) malloc(sizeof(double) * fdim * 19);
 #endif
@@ -737,7 +737,7 @@ static unsigned rule15gauss_evalError(rule *r,
      }
 
 #ifdef R_PACKAGE
-     Free(scratch);
+     R_Free(scratch);
 #else
      free(scratch);
 #endif
@@ -750,7 +750,7 @@ static rule *make_rule15gauss(unsigned dim)
      rule *r;
      if (dim != 1) return 0; /* this rule is only for 1d integrals */
 #ifdef R_PACKAGE
-     r = (rule *) Calloc(1, rule);
+     r = (rule *) R_Calloc(1, rule);
 #else
      r = (rule *) malloc(sizeof(rule));
 #endif
@@ -800,7 +800,7 @@ static heap heap_alloc(unsigned nalloc, unsigned fdim)
      h.items = 0;
      h.fdim = fdim;
 #ifdef R_PACKAGE
-     h.ee = (esterr *) Calloc(fdim, esterr);
+     h.ee = (esterr *) R_Calloc(fdim, esterr);
 #else
      h.ee = (esterr *) malloc(sizeof(esterr) * fdim);
 #endif
@@ -817,7 +817,7 @@ static void heap_free(heap *h)
      heap_resize(h, 0);
      h->fdim = 0;
 #ifdef R_PACKAGE
-     Free(h->ee);
+     R_Free(h->ee);
 #else
      free(h->ee);
 #endif

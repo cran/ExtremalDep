@@ -1,5 +1,5 @@
-95370f8e5b1469f1884d9144bb0de76a *DESCRIPTION
-54a2e350f604ed3303f2dca818b641d2 *NAMESPACE
+f9f9cea7db1650738f9683807f0f0913 *DESCRIPTION
+2ac3639bef4c9bf5ad1f7dd5b24ebcc2 *NAMESPACE
 2cd7d3a5bbf925392110d9f198bbc212 *R/0_sim.R
 1c88fd60d36d44e6997884cb0dc397fb *R/ConfidenceBands.R
 adfd8ebc1206a8375ef38ab35e1729c9 *R/ConvexityConstraints.R
@@ -8,6 +8,7 @@ a7bccf8c5e6b2faf3daaafbe216e2fc0 *R/Dependence.R
 78c19bf60bc378d39fca6df17895be5b *R/Distributions.R
 0a869478d16b7a81258044ce7c3d19cc *R/ExtremalDep.R
 ab404e622744c2457711efcce39fc456 *R/Madogram.R
+5139e7c8d91959f8954d87ac8473b8c3 *R/PAMfmado.R
 32ddcbfb02d0d219d74f3078540d76ee *R/UnivExtremeQ.R
 5b12bc4e546c63723047d9fce1cd3988 *R/adaptIntegrate.R
 a4b7df3c6911951816c87fa63280f63a *R/beed.R
@@ -36,6 +37,7 @@ d9f4269669ed6f038053fbbe8e5834da *data/heat.rda
 b6b3d123b2205e1f0b05c101d1e8cd4f *data/pollution.rda
 db025830f848f34f6649de2d5afb7126 *man/ExtQ.Rd
 3e3efcee79914b73402941e713df966d *man/MilanPollution.Rd
+36b6fc628ee083d593958c38c5b05cf9 *man/PAMfmado.Rd
 0837ce92c85660aedecae2a553bb77db *man/PrecipFrance.Rd
 1d571034c6a3dbd75c3873c9ffdc0cbe *man/Wind.Rd
 749937ecd8868833cfcd0e7b0ef4ebe8 *man/WindSpeedGust.Rd

@@ -4,7 +4,7 @@ export(angular, beed.boot, beed.confband, beed,
 	fExtDep, fExtDep.np, pFailure, trans2UFrechet, trans2GEV, dGEV, pGEV, qGEV, fGEV, 
 	madogram, rExtDepSpat, fExtDepSpat,
 	index.ExtDep, plot_ExtDep, plot_ExtDep.np,
-	diagnostics, returns, summary_ExtDep, ExtQ, ellipse, simplex)
+	diagnostics, returns, summary_ExtDep, ExtQ, ellipse, simplex, PAMfmado)
 
 
 useDynLib(ExtremalDep, .registration = TRUE)
@@ -14,14 +14,14 @@ importFrom("sn", "qsn", "rmst")
 importFrom("grDevices", "heat.colors", "gray", "adjustcolor", "colorRampPalette")
 importFrom("graphics", "contour", "image", "lines", "points", "abline",
            "polygon", "segments", "text", "curve", "hist", "mtext", "par", 
-	   "plot", "axis", "legend")
+	   	   "plot", "axis", "legend")
 importFrom("stats", "df", "qf", "dnorm", "dt", "ecdf", "integrate", "optim",
            "pnorm", "pt", "quantile", "rnorm", "runif", "dunif", "uniroot",
            "var", "rpois", "dpois", "rbeta", "dbeta", "dnbinom", "pexp", 
-	   "qchisq", "pbeta", "qnorm", "cov", "rnbinom",  "approxfun", "dist", 
-	   "na.omit", "rexp", "density")
+	       "qchisq", "pbeta", "qnorm", "cov", "rnbinom",  "approxfun", "dist", 
+	       "na.omit", "rexp", "density")
 importFrom("evd", "rbvevd", "abvnonpar", "amvnonpar", "pfrechet", "pgumbel", 
-	   "pgev", "abvevd", "hbvevd")
+	       "pgev", "abvevd", "hbvevd")
 importFrom("numDeriv", "jacobian", "hessian")
 importFrom("quadprog", "solve.QP")
 importFrom("copula", "An", "An.biv")
@@ -33,3 +33,4 @@ importFrom("fda", "fbplot")
 importFrom("parallel", "makeCluster")
 importFrom("doParallel", "registerDoParallel")
 importFrom("foreach", "foreach", "%dopar%")
+importFrom("cluster", "pam")

@@ -1700,8 +1700,9 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
   }
   
   if(parallel){
+    stopCluster(cl)
     gc()
-    closeAllConnections()
+    # closeAllConnections()
   }
  
   if(jw < Ns){

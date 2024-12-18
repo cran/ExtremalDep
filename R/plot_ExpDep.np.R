@@ -497,6 +497,8 @@ plot_ExtDep.np <- function(out, type, summary.mcmc, burn, y, probs,
         }
         
       }
+
+      par(mfrow=c(1,1), mar=c(5.1, 4.1, 4.1, 2.1), mgp=c(3,1,0))
       
       q.out <- mget(ls(pattern = "Qset_P"))
       

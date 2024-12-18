@@ -1,5 +1,5 @@
-f9f9cea7db1650738f9683807f0f0913 *DESCRIPTION
-2ac3639bef4c9bf5ad1f7dd5b24ebcc2 *NAMESPACE
+23687d3bac3e0ab0f90200feda626919 *DESCRIPTION
+94bedcb157754afdb155b9a0ed59b05d *NAMESPACE
 2cd7d3a5bbf925392110d9f198bbc212 *R/0_sim.R
 1c88fd60d36d44e6997884cb0dc397fb *R/ConfidenceBands.R
 adfd8ebc1206a8375ef38ab35e1729c9 *R/ConvexityConstraints.R
@@ -17,12 +17,12 @@ a4b7df3c6911951816c87fa63280f63a *R/beed.R
 94af3eafe40c648b2f2cb98c8a7ede61 *R/diagnostics.R
 288b43eb5162685c6838a72d9ae779dd *R/dim_ExtDep.R
 46002c8a23a8445d83ba8cf67f11ad7f *R/fExtDep.R
-2747811c3d345593355d8d5731bcd49e *R/fExtDepSpat.R
+746958c7cd927e589d8a4efacd4f853a *R/fExtDepSpat.R
 6ea17377459c5c46a76465c50a9c698e *R/fExtDep_np.R
 a7cd46129af975c1f17c3965d7bec1fd *R/fGEV.R
 4699160d26dd4959ceadf31ced5d613e *R/loglikelihood.R
 af9fe6e20a11cad7eb4c8291b338fc63 *R/pExtDep.R
-4de6f47f0c2e5e8f0d7a8ca36970c56d *R/plot_ExpDep.np.R
+f0033f0fda3194730fd1e9bb3336df41 *R/plot_ExpDep.np.R
 918bcf2d9cbf12ae44d030fa886fd07c *R/plot_ExtDep.R
 5ce7444cbcb4ebb1468ced708ba03704 *R/rExtDep.R
 29d739bb61e40fe752db90ba0d644cdb *R/rExtDepSpat.R

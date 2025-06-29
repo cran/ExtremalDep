@@ -1,21 +1,44 @@
 \name{fExtDep.np}
 \alias{fExtDep.np}
+\alias{plot.ExtDep_npBayes}
+\alias{plot.ExtDep_npFreq}
+\alias{plot.ExtDep_npEmp}
+\alias{summary.ExtDep_npBayes}
 
 \title{Non-parametric extremal dependence estimation}
 \description{This function estimates the bivariate extremal dependence structure using a non-parametric approach based on Bernstein Polynomials.}
 
 \usage{
-fExtDep.np(method, data, cov1=NULL, cov2=NULL, u, mar.fit=TRUE, 
+fExtDep.np(x, method, cov1=NULL, cov2=NULL, u, mar.fit=TRUE, 
            mar.prelim=TRUE, par10, par20, sig10, sig20, param0=NULL, 
            k0=NULL, pm0=NULL, prior.k="nbinom", prior.pm="unif", 
            nk=70, lik=TRUE, 
            hyperparam = list(mu.nbinom=3.2, var.nbinom=4.48), 
            nsim, warn=FALSE, type="rawdata")
+           
+\method{plot}{ExtDep_npBayes}(x, type, summary.mcmc, burn, y, probs, 
+     A_true, h_true, est.out, mar1, mar2, dep, 
+     QatCov1=NULL, QatCov2=QatCov1, P, 
+     CEX=1.5, col.data, col.Qfull, col.Qfade, data=NULL, ...)
+
+\method{plot}{ExtDep_npFreq}(x, type, est.out, mar1, mar2, dep, P, CEX=1.5, 
+     col.data, col.Qfull, data=NULL, ...)
+     
+\method{plot}{ExtDep_npEmp}(x, type, est.out, mar1, mar2, dep, P, CEX=1.5, 
+     col.data, col.Qfull, data=NULL, ...)     
+     
+\method{summary}{ExtDep_npBayes}(object, w, burn, cred=0.95, plot=FALSE, ...)    
+     
 }
 
 \arguments{
+  \item{x}{
+\code{fExtDep.np}: A matrix containing the data. 
+
+\code{plot} method functions: any object returned by \code{fExtDep.np}.
+}
+  \item{object}{A list object of class \code{ExtDep_npBayes}.}
 	\item{method}{A character string indicating the estimation method inlcuding \code{"Bayesian"}, \code{"Frequentist"} and \code{"Empirical"}.}
-	\item{data}{A matrix containing the data.}
 	\item{cov1, cov2}{A covariate vector/matrix for linear model on the location parameter of the marginal distributions. \code{length(cov1)}/\code{nrow(cov1)} needs to match \code{nrow(data)}. If \code{NULL} it is assumed to be constant. Required when \code{method="Bayesian"}.}
 	\item{u}{When \code{method="Bayesian"}: a bivariate indicating the threshold for the exceedance approach. If logical \code{TRUE} the threshold are calculated by default as the 90\% quantiles. When missing, a block maxima approach is considered. When \code{method="Frequentist"}: the associated quantile is used to select observations with the largest radial components. If missing, the 90\% quantile is used. }
 	\item{mar.fit}{A logical value indicated whether the marginal distributions should be fitted. When \code{method="Frequentist"}, data are empirically transformed to unit Frechet scale if \code{mar.fit=TRUE}. Not required when \code{method="Empirical"}.}
@@ -34,11 +57,45 @@ fExtDep.np(method, data, cov1=NULL, cov2=NULL, u, mar.fit=TRUE,
   \item{hyperparam}{A list of the hyper-parameters depending on the choice of \code{prior.k} and \code{prior.pm}. See \bold{details}. Required when \code{method="Bayesian"}.}
   \item{nsim}{An integer indicating the number of iterations in the Metropolis-Hastings algorithm. Required when \code{method="Bayesian"}.}	
   \item{warn}{A logical value. If \code{TRUE} warnings are printed when some specifics (e.g., \code{param0}, \code{k0}, \code{pm0} and \code{hyperparam}) are not provided and set by default. Required when \code{method="Bayesian"}.}
-  \item{type}{A character string indicating whther the data are \code{"rawdata"} or \code{"maxima"}. Required when \code{method="Bayesian"}.}
+  \item{type}{
+\code{fExtDep.np}: A character string indicating whther the data are \code{"rawdata"} or \code{"maxima"}. Required when \code{method="Bayesian"}.
+
+\code{plot} method function:A character string indicating the type of graphical summary to be plotted. Can take value \code{"summary"} or \code{"Qsets"} for any class type of \code{x}, \code{"A"} when \code{x} is of class \code{ExtDep_npBayes} or \code{ExtDep_npFreq},  \code{"returns"}, \code{"h"}, \code{"pm"} and \code{"k"} when \code{x} is of class \code{ExtDep_npBayes} or \code{"psi"} \code{x} is of class \code{ExtDep_npEmp}.
+}
+
+  \item{summary.mcmc}{The output of the \code{summary.ExtDep_npBayes} function.}
+  \item{burn}{The burn-in period.}
+  \item{y}{A 2-column matrix of unobserved thresholds at which the returns are calculated. Required when \code{type="returns"}.}
+  \item{probs}{The probability of joint exceedances, the output of the \code{\link{return}} function.}
+  \item{A_true}{A vector representing the true pickands dependence function evaluated at the grid points on the simplex given in the \code{summary.mcmc} object.}
+  \item{h_true}{A vector representing the true angular density function evaluated at the grid points on the simplex given in the \code{summary.mcmc} object.}
+  \item{est.out}{A list containing:
+    \describe{
+      \item{ghat:}{a 3-row matrix giving the posterior summary for the estimate of the bound;}
+      \item{Shat and Shat_post:}{a matrix of the posterior and a 3-row matrix giving the posterior summary for the estimate of the basic set \eqn{S};}
+      \item{nuShat and nuShat_post:}{a matrix of the posterior and a 3-row matrix giving the posterior summary for the estimate of the measure \eqn{\nu(S)};}
+    }
+    Note that a posterior summary is made of its mean and \eqn{90\%}credibility interval.
+    
+    Only required when \code{x} is of class \code{ExtDep_npBayes} and \code{type="Qsets"}.}
+  \item{mar1, mar2}{Vectors of marginal GEV parameters. Required when \code{type="Qsets"} except when \code{x} is of class \code{ExtDep_npBayes} and the marginal parameter were fixed.}
+  \item{dep}{A logical value; if \code{TRUE} the estimate of the dependence is plotted when computing extreme quantile regions (\code{type="Qsets"}).}
+  \item{QatCov1, QatCov2}{Matrices representing the value of the covariates at which extreme quantile regions should be computed. Required when \code{type="Qsets"}. See arguments \code{cov1} and \code{cov2} from \code{fExtDep.np}. }
+  \item{P}{A vector indicating the probabilities associated with the quantiles to be computed. Required when \code{type="Qsets"}.}
+  \item{CEX}{Label and axis sizes.}
+  \item{col.data, col.Qfull, col.Qfade}{Colors for data, estimate of extreme quantile regions and its credible interval (when applicable). Required when \code{type="Qsets"}.}
+  \item{data}{A 2-column matrix providing the original data to be plotted when \code{type="Qsets"}.}
+  \item{w}{A matrix or vector of values on the unit simplex. If vector values need to be between 0 and 1, if matrix each row need to sum to one.}
+  \item{cred}{A probability for the credible intervals.}
+  \item{plot}{A logical value indicating whether \code{plot.ExtDep_npBayes} should be called.}
+  \item{...}{Additional graphical parameters}
 
 }
 
 \details{
+
+Regarding the \code{fExtDep.np} function:
+
 When \code{method="Bayesian"}, the vector of hyper-parameters is provided in the argument \code{hyperparam}. It should include:
 \describe{
 \item{If \code{prior.pm="unif"}}{ requires \code{hyperparam$a.unif} and \code{hyperparam$b.unif}.}
@@ -51,10 +108,29 @@ When \code{u} is specified Algorithm 1 of Beranger et al. (2021) is applied wher
 When \code{method="Frequentist"}, if \code{type="rawdata"} then pseudo-polar coordinates are extracted and only observations with a radial component above some high threshold (the quantile equivalent of \code{u} for the raw data) are retained. The inferential approach proposed in Marcon et al. (2017) based on the approximate likelihood is applied.
 
 When \code{method="Empirical"}, the empirical estimation procedure presented in Einmahl et al. (2013) is applied.
+
+Regarding the \code{plot} method function:
+  \describe{
+  \item{\code{type="returns"}:}{produces a (contour) plot of the probabilities of exceedances for some threshold. This corresponds to the output of the \code{returns} function.}
+  \item{\code{type="A"}:}{produces a plot of the estimated Pickands dependence function. If \code{A_true} is specified the plot includes the true Pickands dependence function and a functional boxplot for the estimated function.}
+  \item{\code{type="h"}:}{produces a plot of the estimated angular density function. If \code{h_true} is specified the plot includes the true angular density and a functional boxplot for the estimated function.}
+  \item{\code{type="pm"}:}{produces a plot of the prior against the posterior for the mass at \eqn{\{0\}}.}
+  \item{\code{type="k"}:}{produces a plot of the prior against the posterior for the polynomial degree \eqn{k}.}
+  \item{\code{type="summary"}:}{when the estimation was performed in a Bayesian framework then a 2 by 2 plot with types \code{"A"}, \code{"h"}, \code{"pm"} and \code{"k"} is produced. Otherwise a 1 by 2 plot with types \code{"A"} and \code{"h"} is produced.}
+  \item{\code{type="Qsets"}:}{displays extreme quantile regions according to the methodology developped in Beranger et al. (2021).}
+  }
+
+Regarding the code \code{summary} method function:
+
+It is obvious that the value of \code{burn} cannot be greater than the number of iterations in the mcmc algorithm. This can be found as \code{object$nsim}.
+
 }
 
 \value{
-Outputs take the form of list including:
+
+Regarding the \code{fExtDep.np} function:
+
+Returns lists of class \code{ExtDep_npBayes}, \code{ExtDep_npFreq} or \code{ExtDep_npEmp} depending on the value of the \code{method} argument. Each list includes:
   \describe{
   \item{method:}{The argument.}
   \item{type:}{whether it is \code{"maxima"} or \code{"rawdata"} (in the broader sense that a threshold exceedance model was taken).}
@@ -85,17 +161,48 @@ Finally, if the argument \code{u} is provided, the list also contains:
   \item{kn:}{The empirical estimate of the probability of being greater than the threshold.}
   }
   
-When \code{method="Frequentist"}, the list includes:  
-  
-When \code{method="Empirical"}, the list includes:
+When \code{method="Frequentist"}, the list includes:
   \describe{
   \item{hhat:}{An estimate of the angular density.}
   \item{Hhat:}{An estimate of the angular measure.}
   \item{p0, p1:}{The estimates of the probability mass at 0 and 1.}
-  \item{Ahat:}{An estimate of the PIckands dependence function.}
+  \item{Ahat:}{An estimate of the Pickands dependence function.}
   \item{w:}{A sequence of value on the bivariate unit simplex.}
   \item{q:}{A real in \eqn{[0,1]}{[0,1]} indicating the quantile associated with the threshold \code{u}. Takes value \code{NULL} if \code{type="maxima"}.}
   \item{data:}{The data on the unit Frechet scale (empirical transformation) if \code{type="rawdata"} and \code{mar.fit=TRUE}. Data on the original scale otherwise.}
+  }
+  
+When \code{method="Empirical"}, the list includes:  
+  \describe{
+  \item{fi:}{An estimate of the angular measure.}
+  \item{h_hat:}{An estimate of the angular density.}
+  \item{theta_seq:}{A sequence of angles from \eqn{0}{0} to \eqn{pi/2}{pi/2}}
+  \item{data}{The argument.}
+  }
+
+Regarding the code \code{summary} method function:
+
+The function returns a list with the following objects:
+  \describe{
+  \item{k.median, k.up, k.low:}{Posterior median, upper and lower bounds of the CI for the estimated Bernstein polynomial degree \eqn{\kappa};}
+  \item{h.mean, h.up, h.low:}{Posterior mean, upper and lower bounds of the CI for the estimated angular density \eqn{h};}
+  \item{A.mean, A.up, A.low:}{Posterior mean, upper and lower bounds of the CI for the estimated Pickands dependence function \eqn{A};}
+  \item{p0.mean, p0.up, p0.low:}{Posterior mean, upper and lower bounds of the CI for the estimated point mass \eqn{p_0};}
+  \item{p1.mean, p1.up, p1.low:}{Posterior mean, upper and lower bounds of the CI for the estimated point mass \eqn{p_1};}
+  \item{A_post:}{Posterior sample for Pickands dependence function;}
+  \item{h_post:}{Posterior sample for angular density;}
+  \item{eta.diff_post:}{Posterior sample for the Bernstein polynomial coefficients (\eqn{\eta} parametrisation);}
+  \item{beta_post:}{Posterior sample for the Bernstein polynomial coefficients (\eqn{\beta} parametrisation);}
+  \item{p0_post, p1_post:}{Posterior sample for point masses \eqn{p_0} and \eqn{p_1};}
+  \item{w:}{A vector of values on the bivariate simplex where the angular density and Pickands dependence function were evaluated;}
+  \item{burn:}{The argument provided;}
+  }
+  If the margins were also fitted, the list given as \code{object} would contain \code{mar1} and \code{mar2} and the function would also output:
+  \describe{
+  \item{mar1.mean, mar1.up, mar1.low:}{Posterior mean, upper and lower bounds of the CI for the estimated marginal parameter on the first component;}
+  \item{mar2.mean, mar2.up, mar2.low:}{Posterior mean, upper and lower bounds of the CI for the estimated marginal parameter on the second component;}
+  \item{mar1_post:}{Posterior sample for the estimated marginal parameter on the first component;}
+  \item{mar2_post: }{Posterior sample for the estimated marginal parameter on the second component;}  
   }
 
 }
@@ -129,49 +236,111 @@ When \code{method="Empirical"}, the list includes:
 \seealso{\code{\link{dExtDep}}, \code{\link{pExtDep}}, \code{\link{rExtDep}}, \code{\link{fExtDep}} }
 
 \examples{
-# Example Bayesian estimation, 
-# Threshold exceedances approach, threshold set by default
-# Joint estimation margins + dependence
-# Default uniform prior on pm
-# Default negative binomial prior on polynomial order
-# Quadratic relationship between location and max temperature
-
-\dontrun{
-  data(MilanPollution)
-  data <- Milan.winter[,c("NO2", "SO2", "MaxTemp")]
-  data <- data[complete.cases(data),]
-  
-  covar <- cbind(rep(1,nrow(data)), data[,3], data[,3]^2)
-  hyperparam <- list(mu.binom=6, var.binom=8, a.unif=0, b.unif=0.2)
-  pollut <- fExtDep.np(method="Bayesian", data = data[,-3], u=TRUE,
-                       cov1 = covar, cov2 = covar, mar.prelim=FALSE,
-                       par10 = c(100,0,0,35,1), par20 = c(20,0,0,20,1),
-                       sig10 = 0.1, sig20 = 0.1, k0 = 5,
-                       hyperparam = hyperparam, nsim = 5e+4)
-  # Warning: This is slow!                     
-}
-
-# Example Frequentist estimation
-# Data are maxima
+###########################################################
+### Example 1 - Wind Speed and Differential of pressure ###
+###########################################################
 
 data(WindSpeedGust)
+
 years <- format(ParcayMeslay$time, format="\%Y")
 attach(ParcayMeslay[which(years \%in\% c(2004:2013)),])
-  
+
+# Marginal quantiles
 WS_th <- quantile(WS,.9)
 DP_th <- quantile(DP,.9)
-  
+
+# Standardisation to unit Frechet (requires evd package)
 pars.WS <- evd::fpot(WS, WS_th, model="pp")$estimate
 pars.DP <- evd::fpot(DP, DP_th, model="pp")$estimate
   
+# transform the marginal distribution to common unit Frechet:
 data_uf <- trans2UFrechet(cbind(WS,DP), type="Empirical")
-  
+
+# compute exceedances 
 rdata <- rowSums(data_uf)
 r0 <- quantile(rdata, probs=.90)
-extdata <- data_uf[rdata>=r0,]
-  
-SP_mle <- fExtDep.np(method="Frequentist", data=extdata, k0=10, 
-                     type="maxima")
+extdata_WSDP <- data_uf[rdata>=r0,]
+
+# Fit
+SP_mle <- fExtDep.np(x=extdata_WSDP, method="Frequentist", k0=10, type="maxima")
+
+# Plot
+plot(x=SP_mle, type="summary")
+
+####################################################
+### Example 2 - Pollution levels in Milan, Italy ###
+####################################################
+	
+\dontrun{
+
+### Here we will only model the dependence structure	
+data(MilanPollution)
+
+data <- Milan.winter[,c("NO2","SO2")] 
+data <- as.matrix(data[complete.cases(data),])
+
+# Thereshold
+u <- apply(data, 2, function(x) quantile(x, prob=0.9, type=3))
+
+# Hyperparameters
+hyperparam <- list(mu.nbinom = 6, var.nbinom = 8, a.unif=0, b.unif=0.2)
+
+### Standardise data to univariate Frechet margins
+
+f1 <- fGEV(data=data[,1], method="Bayesian", sig0 = 0.0001, nsim = 5e+4)
+diagnostics(f1)
+burn1 <- 1:30000
+gev.pars1 <- apply(f1$param_post[-burn1,],2,mean)
+sdata1 <- trans2UFrechet(data=data[,1], pars=gev.pars1, type="GEV")
+
+f2 <- fGEV(data=data[,2], method="Bayesian", sig0 = 0.0001, nsim = 5e+4)
+diagnostics(f2)
+burn2 <- 1:30000
+gev.pars2 <- apply(f2$param_post[-burn2,],2,mean)
+sdata2 <- trans2UFrechet(data=data[,2], pars=gev.pars2, type="GEV")
+
+sdata <- cbind(sdata1,sdata2)
+
+### Bayesian estimation using Bernstein polynomials
+
+pollut1 <- fExtDep.np(x=sdata, method="Bayesian", u=TRUE,
+                      mar.fit=FALSE, k0=5, hyperparam = hyperparam, nsim=5e+4)
+
+diagnostics(pollut1)
+pollut1_sum <- summary(object=pollut1, burn=3e+4, plot=TRUE)
+pl1 <- plot(x=pollut1, type="Qsets", summary.mcmc=pollut1_sum, 
+            mar1=gev.pars1, mar2=gev.pars2, P = 1/c(600, 1200, 2400),
+            dep=TRUE, data=data, xlim=c(0,400), ylim=c(0,400))
+
+pl1b <- plot(x=pollut1, type="Qsets", summary.mcmc=pollut1_sum, est.out=pl1$est.out, 
+             mar1=gev.pars1, mar2=gev.pars2, P = 1/c(1200),
+             dep=FALSE, data=data, xlim=c(0,400), ylim=c(0,400))
+
+### Frequentist estimation using Bernstein polynomials
+
+pollut2 <- fExtDep.np(x=sdata, method="Frequentist", mar.fit=FALSE, type="rawdata", k0=8)
+plot(x=pollut2, type = "summary", CEX=1.5)
+
+pl2 <- plot(x=pollut2, type="Qsets", mar1=gev.pars1, mar2=gev.pars2, 
+            P = 1/c(600, 1200, 2400),
+            dep=TRUE, data=data, xlim=c(0,400), ylim=c(0,400),
+            xlab=expression(NO[2]), ylab=expression(SO[2]),
+            col.Qfull = c("red", "green", "blue"))
+                      
+### Frequentist estimation using EKdH estimator
+
+pollut3 <- fExtDep.np(x=data, method="Empirical")
+plot(x=pollut3, type = "summary", CEX=1.5)
+
+pl3 <- plot(x=pollut3, type="Qsets", mar1=gev.pars1, mar2=gev.pars2,
+            P = 1/c(600, 1200, 2400),
+            dep=TRUE, data=data, xlim=c(0,400), ylim=c(0,400),
+            xlab=expression(NO[2]), ylab=expression(SO[2]),
+            col.Qfull = c("red", "green", "blue"))
+
 }
 
-\keyword{models}
+}
+
+\keyword{models} 
+\keyword{Nonparametric}

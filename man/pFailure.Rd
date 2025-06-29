@@ -73,7 +73,7 @@ rdata <- rowSums(data_uf)
 r0 <- quantile(rdata, probs=.90)
 extdata <- data_uf[rdata>=r0,]
   
-SP_mle <- fExtDep.np(method="Frequentist", data=extdata, k0=10, 
+SP_mle <- fExtDep.np(x=extdata, method="Frequentist", k0=10, 
                      type="maxima")
 
 \donttest{

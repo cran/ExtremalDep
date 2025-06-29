@@ -1,4 +1,4 @@
-fExtDep.np <- function(method, data, cov1=NULL, cov2=NULL, u, mar.fit=TRUE, mar.prelim=TRUE,
+fExtDep.np <- function(x, method, cov1=NULL, cov2=NULL, u, mar.fit=TRUE, mar.prelim=TRUE,
                        par10, par20, sig10, sig20, param0=NULL, k0=NULL,
                        pm0=NULL, prior.k="nbinom", prior.pm="unif", nk=70, lik=TRUE,
                        hyperparam = list(mu.nbinom = 3.2, var.nbinom = 4.48), nsim, warn=FALSE,
@@ -7,6 +7,7 @@ fExtDep.np <- function(method, data, cov1=NULL, cov2=NULL, u, mar.fit=TRUE, mar.
   
   methods <- c("Bayesian", "Frequentist", "Empirical")
   if(!any(method ==  methods)){ stop("estimation method wrongly specified")}
+  data <- x
   
   if(method=="Bayesian"){
     
@@ -68,11 +69,13 @@ fExtDep.np <- function(method, data, cov1=NULL, cov2=NULL, u, mar.fit=TRUE, mar.
       }
       
     }
+    class(out) <- "ExtDep_npBayes"
     
   }
   
   if(method == "Empirical"){
     out <- Fit.Empirical(data=data)
+    class(out) <- "ExtDep_npEmp"
   }
   
   if(method == "Frequentist"){
@@ -156,7 +159,7 @@ fExtDep.np <- function(method, data, cov1=NULL, cov2=NULL, u, mar.fit=TRUE, mar.
 
     out <- list(method=method, type=type, hhat=hhat, Hhat=Hhat, p0=p0, p1=p1, 
                 Ahat=Aest_mle, w=w, q=q, extdata=extdata ) 
-    
+    class(out) <- "ExtDep_npFreq"
   }
   
   return(out)

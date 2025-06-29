@@ -153,7 +153,24 @@ dExtDep <- function(x, method="Parametric", model, par, angular=TRUE, log=FALSE,
   
 }
 
-
+lambda.HR <- function(lambda){
+  
+  if(length(lambda)!=3){stop("This function only works for the 3-dimensional HR model.")}
+  
+  ind <- which(is.na(lambda))
+  if(length(ind) !=1){stop("Exactly one of the elements of `lambda` need to be NA")}
+  
+  ab <- lambda[-ind]^2
+  
+  lambda_up <- sqrt(sum(ab))
+  lambda_low <- sqrt(max(ab[1]-ab[2], ab[2]-ab[1]))
+  
+  l1 <- l2 <- lambda
+  l1[ind] <- lambda_low
+  l2[ind] <- lambda_up
+  return(rbind(l1,l2))
+  
+}
 
 
 ####################################################################
@@ -226,6 +243,14 @@ dens_pb <- function (x, b, alpha, log, vectorial){
 
 dens_hr <- function (x, lambda, log, vectorial){
   
+  if(any(lambda<=0)){
+    if(log){
+      return(-1e300)
+    }else{
+      return(1e-300)
+    }  
+  }
+  
   dens_husler<-function(w,lambda){
     p<-length(w);
     k=p-1
@@ -248,7 +273,7 @@ dens_hr <- function (x, lambda, log, vectorial){
     if(any(is.na(w.tilde))){return (1e-300)}
     
     part1 = w[1]^2*prod(w[2:p])*(2*pi)^(k/2)* abs(det(Sigma))^(1/2)
-    part2 = exp(-0.5*t(w.tilde) %*% solve(Sigma) %*% t(t(w.tilde)))
+    part2 = exp(-0.5*sum(forwardsolve(t(chol(Sigma)), w.tilde)^2))
     
     return(part2/part1)
   }
@@ -723,6 +748,14 @@ subset.c <- function(w, c){
 
 dens_et <- function (x, rho, mu, c, log, vectorial){
   
+  if(any(abs(rho)>=1) || mu<=0){
+    if(log){
+      return(-1e300)
+    }else{
+      return(1e-300)
+    }  
+  }
+  
   # in the following functions:
   #
   # rho is a vector of size choose(dim,2) which mean choose 2 from dim
@@ -1189,7 +1222,7 @@ dens_est <- function (x, rho, alpha, mu, c, log, vectorial){
   
   Sigma_j <-function(rho,j){
     Sig <- Sigma(rho)
-    return(Sig[-j,-j] - Sig[-j,j] %*% t(Sig[j,-j]) )
+    return(Sig[-j,-j] - tcrossprod(Sig[-j,j], Sig[j,-j]) )
   }
   
   s_j <- function(rho,j){
@@ -1205,7 +1238,8 @@ dens_est <- function (x, rho, alpha, mu, c, log, vectorial){
   Sigma_bar_j <- function(rho,j){
     sigma_j <- Sigma_j(rho,j)
     sj <- s_j(rho,j)
-    return( solve(sj) %*% t(sigma_j) %*% solve(sj) )
+    sj_inv <- chol2inv(chol(sj))
+    return(tcrossprod(sj_inv, sigma_j) %*% sj_inv)
   }
   
   alpha_tilde <- function(alpha,j){
@@ -1217,8 +1251,8 @@ dens_est <- function (x, rho, alpha, mu, c, log, vectorial){
     sigma_j <- Sigma_j(rho,j)
     Alpha_tilde <- alpha_tilde(alpha,j)
     
-    num <- alpha[j] + Sig[j,-j] %*% t(Alpha_tilde)
-    denom <- sqrt( 1 + Alpha_tilde %*% t(sigma_j) %*% t(Alpha_tilde)  )
+    num <- alpha[j] + tcrossprod(Sig[j,-j], Alpha_tilde)
+    denom <- sqrt( 1 + tcrossprod(tcrossprod(Alpha_tilde, sigma_j), Alpha_tilde)  )
     return(num/denom)
   }
   
@@ -1231,7 +1265,7 @@ dens_est <- function (x, rho, alpha, mu, c, log, vectorial){
   tau_star_j <- function(rho,alpha,mu,j){
     Sig <- Sigma(rho)
     Alpha_tilde <- alpha_tilde(alpha,j)
-    return( sqrt(mu+1) * (alpha[j] + Sig[-j,j] %*% t(Alpha_tilde) )     )
+    return( sqrt(mu+1) * (alpha[j] + tcrossprod(Sig[-j,j], Alpha_tilde) )     )
   }
   
   nu_p <- function(rho,alpha,mu,j){
@@ -1289,14 +1323,14 @@ dens_est <- function (x, rho, alpha, mu, c, log, vectorial){
     
     sigma_bar <- Sigma_bar_j(rho,j)
     alpha_star <- alpha_star_j(rho,alpha,j)
-    return( (alpha_star %*% sigma_bar )/ as.numeric(sqrt( 1 + alpha_star %*% sigma_bar %*% t(alpha_star) )) )
+    return( (alpha_star %*% sigma_bar )/ as.numeric(sqrt( 1 + alpha_star %*% tcrossprod(sigma_bar, alpha_star) )) )
   }
   
   tau_bar_j <- function(rho,alpha,mu,j){
     tau_star <- tau_star_j(rho,alpha,mu,j)
     alpha_star <- alpha_star_j(rho, alpha,j)
     sigma_bar <- Sigma_bar_j(rho,j)
-    return( tau_star / sqrt( 1 + alpha_star %*% sigma_bar %*% t(alpha_star) ) )
+    return( tau_star / sqrt( 1 + alpha_star %*% tcrossprod(sigma_bar, alpha_star) ) )
   }
   
   # in the following functions:
@@ -1312,7 +1346,7 @@ dens_est <- function (x, rho, alpha, mu, c, log, vectorial){
     k=p-1;
     w.tilde<-rep(0,k);
     
-    cond <- sapply(1:p,function(j){alpha_tilde(alpha,j) %*% t(Sigma_j(rho,j)) %*% t(alpha_tilde(alpha,j))})
+    cond <- sapply(1:p,function(j){tcrossprod(tcrossprod(alpha_tilde(alpha,j), Sigma_j(rho,j)), alpha_tilde(alpha,j))})
     
     if( any(cond < -1)){return(1e-300)}else{
       sigma_bar1 <- Sigma_bar_j(rho,1)
@@ -1430,17 +1464,18 @@ dens_est <- function (x, rho, alpha, mu, c, log, vectorial){
   }
   
   ## mass on the corner of the s-th component of the 3-d simplex
-  
+
   corners_skewt_3d <- function(w,rho,alpha,mu,s){
     
     s_bar <- Sigma_bar_j(rho,s)
-    al=t(alpha_star_j(rho,alpha,s))
-    if(t(al) %*% s_bar %*% al < -1 ){return(1e-300)}
+    al <- alpha_star_j(rho,alpha,s)
+    if(al %*% tcrossprod(s_bar, al) < -1 ){return(1e-300)}
     if(sum(eigen(s_bar)$values<0)>=1){return(1e-300)} #Check if matrix is positive definite
     
     up <- c(comp(0,0,0,rho,alpha,mu,1,s), comp(0,0,0,rho,alpha,mu,2,s))
     return(pmest(x=up, location=rep(0,2), scale=s_bar, shape=al, extended=tau_star_j(rho,alpha,mu,s), df=mu+1 ))
   }
+
   
   ## mass on the edge between the s-th and t-th components of the 3-d simplex
   
@@ -1454,10 +1489,12 @@ dens_est <- function (x, rho, alpha, mu, c, log, vectorial){
     sigma_bar1 <- Sigma_bar_j(rho,s)
     alpha_star2 <- alpha_star_j(rho,alpha,t)
     sigma_bar2 <- Sigma_bar_j(rho,t)
-    if( Alpha_tilde1 %*% t(sigma_j1) %*% t(Alpha_tilde1)< -1){return(1e-300)}
-    if( Alpha_tilde2 %*% t(sigma_j2) %*% t(Alpha_tilde2)< -1){return(1e-300)}
-    if(    alpha_star1 %*% sigma_bar1 %*% t(alpha_star1)< -1){return(1e-300)}
-    if(    alpha_star2 %*% sigma_bar2 %*% t(alpha_star2)< -1){return(1e-300)}
+    if( tcrossprod(tcrossprod(Alpha_tilde1, sigma_j1), Alpha_tilde1) < -1){return(1e-300)}
+    if( tcrossprod(tcrossprod(Alpha_tilde2, sigma_j2), Alpha_tilde2) < -1){return(1e-300)}
+    if( alpha_star1 %*% tcrossprod(sigma_bar1, alpha_star1) < -1){return(1e-300)}
+    if( alpha_star2 %*% tcrossprod(sigma_bar2, alpha_star2) < -1){return(1e-300)}
+
+
     
     ind= c(1,2,3)
     w[which((ind != s)  & (ind != t))]=0

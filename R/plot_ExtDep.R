@@ -1,23 +1,189 @@
-plot_ExtDep <- function(object="angular", model, par, log=TRUE, data=NULL, 
-                        contour=TRUE, style, labels, cex.dat=1, cex.lab=1, 
-                        cex.cont=1, Q.fix, Q.range, Q.range0, cond=FALSE,...){
+plot.ExtDep_Freq <- function(x, type, log=TRUE,
+                             contour=TRUE, style, labels, cex.dat=1, cex.lab=1, 
+                             cex.cont=1, Q.fix, Q.range, Q.range0, cond=FALSE,...){
   
-  Objects <- c("angular", "pickands", "returns")
-  if(!any(object ==  Objects)){ stop("object is wrongly specified")}
+  # x is an object of class ExtDep_Freq
+
+  Types <- c("angular", "pickands", "returns")
+  if(missing(type)){type <- "angular"}
+  if(!any(type ==  Types)){ stop("argument `type` is incorrectly specified")}
   
-  if(is.vector(par)){
-    if(model=="AL"){
+  par <- x$par
+  model <- x$model
+  data <- x$data
+
+  if(model=="AL"){
+   dim <- length(par)-1
+  }else{
+   dim <- dim_ExtDep(model=model, par=par)      
+  }
+  
+  if(missing(labels)){
+
+    if(type=="pickands"){
+      if(dim==2){
+        labels <- "x"
+      }else if(dim==3){
+        labels <- c("x", "y")
+      }
+    }else{
+      if(dim==2){
+       labels <- "w"
+      }else if(dim==3){
+       labels <- c(expression(w[1]),expression(w[3]),expression(w[2]))
+      }
+    }
+
+  }
+  
+  if(type=="angular"){
+    
+    if(!is.vector(par)){stop("'par' must be a vector")}
+    
+    models <- c("PB", "HR", "ET", "EST", "TD", "AL")
+    if(!any(model ==  models)){ stop("model wrongly specified")}
+    
+    if(dim == 2){
+      if(missing(style)){style <- "ticks"}
+      AngDens2dPlot(model=model, para=par, log=log, data=data, style=style,
+                    labels=labels, cex.lab=cex.lab, ...)
+    }else if(dim == 3){
+      AngDens3dPlot(model=model, para=par, log=log, data=data, contour=contour, 
+                    labels=labels, cex.dat=cex.dat, cex.lab=cex.lab, cex.cont=cex.cont)
+    }else{
+      stop("Angular density plotted only for 2 or 3 dimensional models.")
+    }
+    
+  }else if (type=="pickands"){
+    
+    if(!is.vector(par)){stop("'par' must be a vector")}
+    
+    models <- c("HR", "ET", "EST")
+    if(!any(model ==  models)){ stop("model wrongly specified")}
+    
+    if(dim == 2){
+      Pick2dPlot(model=model, para=par, label=labels, cex.lab=cex.lab)
+    }else if(dim == 3){
+      Pick3dPlot(model=model, para=par, contour=contour, 
+                 labels=labels, cex.lab=cex.lab, cex.cont=cex.cont)
+    }else{
+      stop("Pickands dependence function plotted only for 2 or 3 dimensional models.")
+    }
+    
+  }else if (type=="returns"){
+    
+    returns.plot(model=model, par=par, Q.fix=Q.fix, Q.range=Q.range, 
+                 Q.range0=Q.range0, cond=cond, labels=labels, cex.lab=cex.lab, ...)
+    
+  }
+  
+}
+
+
+plot.ExtDep_Bayes <- function(x, type, log=TRUE,
+                             contour=TRUE, style, labels, cex.dat=1, cex.lab=1, 
+                             cex.cont=1, Q.fix, Q.range, Q.range0, cond=FALSE, cred.ci=TRUE, subsamp,...){
+  
+  # x is an object of class ExtDep_Bayes
+
+  Types <- c("angular", "pickands", "returns")
+  if(missing(type)){type <- "angular"}
+  if(!any(type ==  Types)){ stop("argument `type` is incorrectly specified")}
+  
+  par <- x$emp.mean
+  model <- x$model
+  data <- x$data
+
+  if(model=="AL"){
+   dim <- length(par)-1
+  }else{
+   dim <- dim_ExtDep(model=model, par=par)      
+  }
+  
+  if(missing(labels)){
+
+    if(type=="pickands"){
+      if(dim==2){
+        labels <- "x"
+      }else if(dim==3){
+        labels <- c("x", "y")
+      }
+    }else{
+      if(dim==2){
+       labels <- "w"
+      }else if(dim==3){
+       labels <- c(expression(w[1]),expression(w[3]),expression(w[2]))
+      }
+    }
+
+  }
+  
+  if(type=="angular"){
+    
+    if(!is.vector(par)){stop("'par' must be a vector")}
+    
+    models <- c("PB", "HR", "ET", "EST", "TD", "AL")
+    if(!any(model ==  models)){ stop("model wrongly specified")}
+    
+    if(dim == 2){
+      if(missing(style)){style <- "ticks"}
+      AngDens2dPlot(model=model, para=par, log=log, data=data, style=style,
+                    labels=labels, cex.lab=cex.lab, ...)
+    }else if(dim == 3){
+      AngDens3dPlot(model=model, para=par, log=log, data=data, contour=contour, 
+                    labels=labels, cex.dat=cex.dat, cex.lab=cex.lab, cex.cont=cex.cont)
+    }else{
+      stop("Angular density plotted only for 2 or 3 dimensional models.")
+    }
+    
+  }else if (type=="pickands"){
+    
+    if(!is.vector(par)){stop("'par' must be a vector")}
+    
+    models <- c("HR", "ET", "EST")
+    if(!any(model ==  models)){ stop("model wrongly specified")}
+    
+    if(dim == 2){
+      Pick2dPlot(model=model, para=par, label=labels, cex.lab=cex.lab)
+    }else if(dim == 3){
+      Pick3dPlot(model=model, para=par, contour=contour, 
+                 labels=labels, cex.lab=cex.lab, cex.cont=cex.cont)
+    }else{
+      stop("Pickands dependence function plotted only for 2 or 3 dimensional models.")
+    }
+    
+  }else if (type=="returns"){
+
+    if(cred.ci){
+
+      if(!missing(subsamp)){
+        npost <- nrow(x$stored.vals)
+        ind <- sample(1:npost, round(npost*subsamp))
+        par <- x$stored.vals[ind,]
+      }else{
+        par <- x$stored.vals
+      }
+    }
+    
+    returns.plot(model=model, par=par, Q.fix=Q.fix, Q.range=Q.range, 
+                 Q.range0=Q.range0, cond=cond, labels=labels, cex.lab=cex.lab, ...)
+    
+  }
+  
+}
+
+
+angular.plot <- function(model, par, log=TRUE, contour=TRUE, labels, cex.lab, cex.cont, ...){
+  
+  models <- c("PB", "HR", "ET", "EST", "TD", "AL")
+  if(!any(model ==  models)){ stop("model wrongly specified")}
+  
+  if(!is.vector(par)){stop("'par' must be a vector")}
+  if(model=="AL"){
       dim <- length(par)-1
     }else{
       dim <- dim_ExtDep(model=model, par=par)      
     }
-  }else if(is.matrix(par)){
-    if(model=="AL"){
-      dim <- ncol(par)-1
-    }else{
-      dim <- dim_ExtDep(model=model, par=par[1,])         
-    }
-  }
   
   if(missing(labels)){
     if(dim==2){
@@ -28,47 +194,274 @@ plot_ExtDep <- function(object="angular", model, par, log=TRUE, data=NULL,
     }
   }
   
-  if(object=="angular"){
-    
-    if(!is.vector(par)){stop("'par' must be a vector")}
-    
-    models <- c("PB", "HR", "ET", "EST", "TD", "AL")
-    if(!any(model ==  models)){ stop("model wrongly specified")}
-    
-    if(dim == 2){
-      AngDens2dPlot(model=model, para=par, log=log, data=data, style=style,
-                    labels=labels, cex.lab=cex.lab, ...)
-    }else if(dim == 3){
-      AngDens3dPlot(model=model, para=par, log=log, data=data, contour=contour, 
-                    labels=labels, cex.dat=cex.dat, cex.lab=cex.lab, cex.cont=cex.cont)
-    }else{
+  if(missing(log)){log <- TRUE}
+  if(missing(contour)){contour <- TRUE}
+  if(missing(cex.lab)){cex.lab <- 1}
+  if(missing(cex.cont)){cex.cont <- 1}
+
+  if(dim == 2){
+    AngDens2dPlot(model=model, para=par, log=log,
+                  labels=labels, cex.lab=cex.lab, ...)
+  }else if(dim == 3){
+    AngDens3dPlot(model=model, para=par, log=log, contour=contour, 
+                  labels=labels, cex.lab=cex.lab, cex.cont=cex.cont)
+  }else{
       stop("Angular density plotted only for 2 or 3 dimensional models.")
-    }
-    
-  }else if (object=="pickands"){
-    
-    if(!is.vector(par)){stop("'par' must be a vector")}
-    
-    models <- c("HR", "ET", "EST")
-    if(!any(model ==  models)){ stop("model wrongly specified")}
-    
-    if(dim == 2){
-      Pick2dPlot(model=model, para=par, label=labels, cex.lab=cex.lab,...)
-    }else if(dim == 3){
-      Pick3dPlot(model=model, para=par, contour=contour, 
-                 labels=labels, cex.lab=cex.lab, cex.cont=cex.cont)
-    }else{
-      stop("Pickands dependence function plotted only for 2 or 3 dimensional models.")
-    }
-    
-  }else if (object=="returns"){
-    
-    returns.plot(model=model, par=par, Q.fix=Q.fix, Q.range=Q.range, 
-                 Q.range0=Q.range0, cond=cond, labels=labels, cex.lab=cex.lab, ...)
-    
   }
   
 }
+
+
+pickands.plot <- function(model, par, labels, cex.lab, contour, cex.cont){
+
+  models <- c("HR", "ET", "EST")
+  if(!any(model ==  models)){ stop("model wrongly specified")}
+
+  if(!is.vector(par)){stop("'par' must be a vector")}
+  if(model=="AL"){
+   dim <- length(par)-1
+  }else{
+   dim <- dim_ExtDep(model=model, par=par)      
+  }
+
+  if(missing(labels)){
+    if(dim==2){
+      labels="w"
+    }
+    if(dim==3){
+      labels=c(expression(w[1]),expression(w[3]),expression(w[2]))
+    }
+  }
+
+  if(missing(cex.lab)){cex.lab <- 1}
+  if(missing(contour)){contour <- TRUE}
+  if(missing(cex.cont)){cex.cont <- 1}
+
+  if(dim == 2){
+    Pick2dPlot(model=model, para=par, label=labels, cex.lab=cex.lab)
+  }else if(dim == 3){
+    Pick3dPlot(model=model, para=par, contour=contour, 
+               labels=labels, cex.lab=cex.lab, cex.cont=cex.cont)
+  }else{
+    stop("Pickands dependence function plotted only for 2 or 3 dimensional models.")
+  }  
+  
+}
+
+returns.plot <- function(model, par, Q.fix, Q.range, Q.range0, cond=FALSE, labels, cex.lab, ...){
+  
+  # Checking the model
+  models <- c("HR", "ET", "EST")
+  if(!any(model ==  models)){ stop("model wrongly specified")}
+  
+  # Looking into par
+  if(is.vector(par)){
+    dim <- dim_ExtDep(model=model, par=par)
+  }else if(is.matrix(par)){
+    dim <- dim_ExtDep(model=model, par=par[1,])
+    n <- nrow(par)
+  }else{
+    stop("'par' must be a vector or a matrix")
+  }
+  if(all(dim != c(2,3)) ){ stop("Dimension 2 or 3 only")}
+  
+  # Checking Q.fix
+  if(is.vector(Q.fix)){
+    nQ.fix <- length(Q.fix)
+    if(nQ.fix != dim){stop("'Q.fix' must be of the same length as the dimension of the model")}
+    if(!any(is.na(Q.fix))){
+      stop("'Q.fix' must contain some NAs. See help!")
+    }else if(all(is.na(Q.fix)) && dim==2){
+      nnfix <- 2
+      cond <- FALSE # 2 dimensions and none are fixed so cannot be conditional.
+    }else if(all(is.na(Q.fix)) && dim==3){
+      stop("'Q.fix' must not contain only NAs for 3 dimensional models. See help!")
+    }else{  
+      rl.var <- which(is.na(Q.fix))
+      rl.cond <- which(!is.na(Q.fix))
+      nnfix <- length(rl.var) # number of non-fixed components
+    }
+  }else{
+    stop("'Q.fix' must be a vector")
+  }
+
+  # Checking Q.range / Q.range0
+  if(is.vector(Q.range)){
+    
+    if(!is.vector(Q.range0)){stop("'Q.range' and 'Q.range0' must be of the same format")}
+    if(length(Q.range) != length(Q.range0)){stop("'Q.range' and 'Q.range0' must be of the same dimension")}
+    
+    Q.range <- matrix(Q.range, ncol=1)
+    nQ.range <- nrow(Q.range)
+    if(nnfix != 1){stop("There should be one NAs in 'Q.fix'")}
+  }else if(is.matrix(Q.range)){
+    if(!is.matrix(Q.range0)){stop("'Q.range' and 'Q.range0' must be of the same format")}
+    if(any(dim(Q.range) != dim(Q.range0))){stop("'Q.range' and 'Q.range0' must be of the same dimension")}
+    nQ.range0 <- nrow(Q.range0)
+    if(ncol(Q.range) > dim){stop("'Q.range' cannot have more columns than the model dimension")}
+    if(ncol(Q.range) == dim && dim==3){stop("'Q.range' cannot have as many columns as the model dimension when the dimension is 3.")}
+    if(nnfix != ncol(Q.range)){stop("There should be as many NAs in 'Q.fix' as columns in 'Q.range'")}
+    Q.range <- as.matrix(expand.grid(Q.range[,1], Q.range[,2])) # Since limited to 3-dim model, when Q.range is a matrix then it can only have 2 columnns
+    nQ.range <- nrow(Q.range)
+  }else{
+    stop("'Q.range' must be a vector or a matrix")
+  }
+  
+  if(missing(cex.lab)){cex.lab <- 1}
+
+  Qmat <- matrix(rep(Q.fix, nQ.range), nrow=nQ.range, ncol=dim, byrow=TRUE)
+  Qmat[,rl.var] <- Q.range
+  
+  # Joint probability
+  p1 <- pExtDep(q=Qmat, type="upper", method="Parametric", model=model, par=par, plot=FALSE) # (n x nQ.range) matrix
+  
+  # conditional probability (if cond=TRUE)
+  if(cond){
+    if(length(rl.cond)==1){
+      p <- p1 / (1-exp(-Q.fix[rl.cond]^(-1)))  
+    }else if(length(rl.cond)==2){
+      # Probability of conditioning event
+      sub.par <- subset.pars(model=model, par=par, sub=rl.cond)
+      p2 <- pExtDep(q=Q.fix[rl.cond], type="upper", method="Parametric", model=model, par=sub.par, plot=FALSE) # vector of length(n)
+      if(is.vector(par)){
+        p <- p1/p2
+      }else if(is.matrix(par)){
+        p <- apply(p1,2, function(x) x/p2) # (n x nQ.range) matrix      
+      }
+      
+    }
+    
+  }else{
+    p <- p1
+  }
+  
+  if(is.vector(par)){
+    p.inv <- 1/p
+  }else if(is.matrix(par)){
+    p.inv <- apply(1/p, 2, func, conf=0.95) # ( 3 x nQ.range) matrix    
+  }
+
+  if(nnfix==1){ # Univariate return levels
+
+    if(missing(labels)){
+      labels <- "x"
+    }
+    
+    if(is.vector(par)){
+      plot(p.inv, Q.range0, xlab="Return period 1/p", type="l", ylab=labels, lwd=2, cex.lab=cex.lab,...)
+    }else if(is.matrix(par)){
+      plot(p.inv[2,], Q.range0, xlab="Return period 1/p", type="l", ylab=labels, lwd=2, cex.lab=cex.lab,...)
+      points(p.inv[1,], Q.range0, type="l", lwd=2, lty=2)
+      points(p.inv[3,], Q.range0, type="l", lwd=2, lty=2)
+    }
+    
+  }else if(nnfix==2){ # Bivariate return levels
+    
+    if(missing(labels)){
+      labels <- c("x", "y")
+    }
+
+    levels <- round(quantile(p.inv, probs=c(1:9)/10))
+    
+    if(is.vector(par)){
+      rl <- matrix(p.inv, nrow=nQ.range0, ncol=nQ.range0)
+      contour(x=Q.range0[,1], y=Q.range0[,2], z=rl, levels=levels, xlab=labels[1], ylab=labels[2], cex.lab=cex.lab,...)
+    }else if(is.matrix(par)){
+      rl.low <- matrix(p.inv[1,], nrow=nQ.range0, ncol=nQ.range0)
+      rl.mean <- matrix(p.inv[2,], nrow=nQ.range0, ncol=nQ.range0)
+      rl.upp <- matrix(p.inv[3,], nrow=nQ.range0, ncol=nQ.range0)
+      
+      contour(x=Q.range0[,1], y=Q.range0[,2], z=rl.mean, levels=levels, xlab=labels[1], ylab=labels[2], lwd=2, cex.lab=cex.lab,...)
+      contour(x=Q.range0[,1], y=Q.range0[,2], z=rl.low, levels=levels, drawlabels=FALSE, add=TRUE, lty=2)
+      contour(x=Q.range0[,1], y=Q.range0[,2], z=rl.upp, levels=levels, drawlabels=FALSE, add=TRUE, lty=3)
+    }
+    
+  }
+  
+  return(invisible(p.inv))
+  
+}
+
+summary.ExtDep_Bayes <- function(object, cred=0.95, plot=FALSE, ...){
+
+  # object is of class ExtDep_Bayes
+
+  x <- object$stored.vals
+
+  if(is.vector(x)){
+    npar <- 1
+  }else if(is.matrix(x)){
+  npar <- ncol(x)    
+  }else{
+    stop("Element `stored.vals` from `object` shoudl be a matrix (or vector).")
+  }
+
+  alpha <- 1-cred
+  out <- apply(x, 2, function(y) c(quantile(y, probs=alpha/2), mean(y), quantile(y, probs=1-alpha/2)) )
+  rownames(out) <- c("CI_low", "mean", "CI_up")
+
+  if(plot){
+    par(mfrow=c(npar,1))
+    for(i in 1:npar){
+     plot(density(x$stored.vals[,i], ...), main=paste("Parameter ", i, "\n", sep=""))      
+    }
+    par(mfrow=c(1,1))
+  }
+
+  return(out)
+} 
+
+subset.pars <- function(model, par, sub){
+  
+  # Find subset of parameters from 3-dimensions to 2-dimensions
+  
+  # Checking the model
+  models <- c("HR", "ET", "EST")
+  if(!any(model ==  models)){ stop("model wrongly specified")}
+  
+  if(is.vector(par)){
+    dim <- dim_ExtDep(model=model, par=par)    
+  }else if(is.matrix(par)){
+    dim <- dim_ExtDep(model=model, par=par[1,])
+  }
+
+  if(length(unique(sub)) != length(sub)){stop("'sub' can only take unique values")}
+  if( all(!is.finite(sub))){stop("Check 'sub' vector")}
+  if(length(sub) > dim){stop("'sub' cannot be of greater length than the dimension of the model")}
+  if( any((sub-floor(sub))!=0) ){stop("'sub' must be a vector of integers")}
+  
+  index <- matrix(c(1,2,1,3,2,3), nrow=2, byrow=FALSE)
+  pair <- apply(index, 2, function(x) all(x==sub))
+  pair.keep <- which(pair==TRUE)
+  
+  if(model == "HR"){
+    if(is.vector(par)){
+      par.new <- par[pair.keep]      
+    }else if(is.matrix(par)){
+      par.new <- par[,pair.keep]
+    }
+  }else if(model == "ET"){
+    if(is.vector(par)){
+      par.new <- par[c(pair.keep,4)]
+    }else if(is.matrix(par)){
+      par.new <- par[,c(pair.keep,4)]
+    }  
+  }else if(model== "EST"){
+    if(is.vector(par)){
+      par.new <- par[c(pair.keep, index[,pair.keep]+3, 7)]
+    }else if(is.matrix(par)){
+      par.new <- par[,c(pair.keep, index[,pair.keep]+3, 7)]
+    }  
+  }
+  
+  if(is.matrix(par)){
+    par.new <- matrix(par.new, nrow=nrow(par))
+  }
+  
+  return(par.new)
+
+}
+
 
 #########################################
 #########################################
@@ -181,13 +574,13 @@ AngDens3dPlot <- function(model='PB', para=c(2,4,15,1), log=TRUE, data=NULL, con
 }
 
 
-Pick2dPlot <- function(model='HR', para=2, label="w", cex.lab=1, ...){
+Pick2dPlot <- function(model='HR', para=2, label="w", cex.lab=1){
  
   w <- seq(0.00001, .99999, length=100)
   pick <- vector(length=100)
   for(i in 1:100){pick[i] <- index.ExtDep(object="pickands", model=model, par=para, x=c(w[i],1-w[i]))}
   
-  plot(w, pick, type="l", ylim=c(0.5, 1), xlab=label, ylab="A(w)", cex.lab=cex.lab,...)
+  plot(w, pick, type="l", ylim=c(0.5, 1), xlab=label, ylab="A(w)", cex.lab=cex.lab)
   polygon(c(0, 0.5, 1), c(1, 0.5, 1), lwd=2, border = 'grey')
   
 }  
@@ -241,179 +634,5 @@ Pick3dPlot <- function(model='HR', para=c(2,2,2), contour=TRUE,
                              labels=round(deciles,3), labcex=cex.cont, nlevels=15,add=TRUE)}
 }
 
-returns.plot <- function(model, par, Q.fix, Q.range, Q.range0, cond, labels, cex.lab, ...){
-  
-  # Checking the model
-  models <- c("HR", "ET", "EST")
-  if(!any(model ==  models)){ stop("model wrongly specified")}
-  
-  # Looking into par
-  if(is.vector(par)){
-    dim <- dim_ExtDep(model=model, par=par)
-  }else if(is.matrix(par)){
-    dim <- dim_ExtDep(model=model, par=par[1,])
-    n <- nrow(par)
-  }else{
-    stop("'par' must be a vector or a matrix")
-  }
-  if(all(dim != c(2,3)) ){ stop("Dimension 2 or 3 only")}
-  
-  # Checking Q.fix
-  if(is.vector(Q.fix)){
-    nQ.fix <- length(Q.fix)
-    if(nQ.fix != dim){stop("'Q.fix' must be of the same length as the dimension of the model")}
-    if(!any(is.na(Q.fix))){
-      stop("'Q.fix' must contain some NAs. See help!")
-    }else if(all(is.na(Q.fix)) && dim==2){
-      nnfix <- 2
-      cond <- FALSE # 2 dimensions and none are fixed so cannot be conditional.
-    }else if(all(is.na(Q.fix)) && dim==3){
-      stop("'Q.fix' must not contain only NAs for 3 dimensional models. See help!")
-    }else{  
-      rl.var <- which(is.na(Q.fix))
-      rl.cond <- which(!is.na(Q.fix))
-      nnfix <- length(rl.var) # number of non-fixed components
-    }
-  }else{
-    stop("'Q.fix' must be a vector")
-  }
-
-  # Checking Q.range / Q.range0
-  if(is.vector(Q.range)){
-    
-    if(!is.vector(Q.range0)){stop("'Q.range' and 'Q.range0' must be of the same format")}
-    if(length(Q.range) != length(Q.range0)){stop("'Q.range' and 'Q.range0' must be of the same dimension")}
-    
-    Q.range <- matrix(Q.range, ncol=1)
-    nQ.range <- nrow(Q.range)
-    if(nnfix != 1){stop("There should be one NAs in 'Q.fix'")}
-  }else if(is.matrix(Q.range)){
-    if(!is.matrix(Q.range0)){stop("'Q.range' and 'Q.range0' must be of the same format")}
-    if(any(dim(Q.range) != dim(Q.range0))){stop("'Q.range' and 'Q.range0' must be of the same dimension")}
-    nQ.range0 <- nrow(Q.range0)
-    if(ncol(Q.range) > dim){stop("'Q.range' cannot have more columns than the model dimension")}
-    if(ncol(Q.range) == dim && dim==3){stop("'Q.range' cannot have as many columns as the model dimension when the dimension is 3.")}
-    if(nnfix != ncol(Q.range)){stop("There should be as many NAs in 'Q.fix' as columns in 'Q.range'")}
-    Q.range <- as.matrix(expand.grid(Q.range[,1], Q.range[,2])) # Since limited to 3-dim model, when Q.range is a matrix then it can only have 2 columnns
-    nQ.range <- nrow(Q.range)
-  }else{
-    stop("'Q.range' must be a vector or a matrix")
-  }
-  
-  Qmat <- matrix(rep(Q.fix, nQ.range), nrow=nQ.range, ncol=dim, byrow=TRUE)
-  Qmat[,rl.var] <- Q.range
-  
-  # Joint probability
-  p1 <- pExtDep(q=Qmat, type="upper", method="Parametric", model=model, par=par, plot=FALSE) # (n x nQ.range) matrix
-  
-  # conditional probability (if cond=TRUE)
-  if(cond){
-    if(length(rl.cond)==1){
-      p <- p1 / (1-exp(-Q.fix[rl.cond]^(-1)))  
-    }else if(length(rl.cond)==2){
-      # Probability of conditioning event
-      sub.par <- subset.pars(model=model, par=par, sub=rl.cond)
-      p2 <- pExtDep(q=Q.fix[rl.cond], type="upper", method="Parametric", model=model, par=sub.par, plot=FALSE) # vector of length(n)
-      if(is.vector(par)){
-        p <- p1/p2
-      }else if(is.matrix(par)){
-        p <- apply(p1,2, function(x) x/p2) # (n x nQ.range) matrix      
-      }
-      
-    }
-    
-  }else{
-    p <- p1
-  }
-  
-  if(is.vector(par)){
-    p.inv <- 1/p
-  }else if(is.matrix(par)){
-    p.inv <- apply(1/p, 2, func, conf=0.95) # ( 3 x nQ.range) matrix    
-  }
-
-  if(nnfix==1){ # Univariate return levels
-    
-    if(is.vector(par)){
-      plot(p.inv, Q.range0, xlab="Return period 1/p", type="l", ylab=labels, lwd=2, cex.lab=cex.lab,...)
-    }else if(is.matrix(par)){
-      plot(p.inv[2,], Q.range0, xlab="Return period 1/p", type="l", ylab=labels, lwd=2, cex.lab=cex.lab,...)
-      points(p.inv[1,], Q.range0, type="l", lwd=2, lty=2)
-      points(p.inv[3,], Q.range0, type="l", lwd=2, lty=2)
-    }
-    
-  }else if(nnfix==2){ # Bivariate return levels
-    
-    levels <- round(quantile(p.inv, probs=c(1:9)/10))
-    
-    if(is.vector(par)){
-      rl <- matrix(p.inv, nrow=nQ.range0, ncol=nQ.range0)
-      contour(x=Q.range0[,1], y=Q.range0[,2], z=rl, levels=levels, xlab=labels[1], ylab=labels[2], cex.lab=cex.lab,...)
-    }else if(is.matrix(par)){
-      rl.low <- matrix(p.inv[1,], nrow=nQ.range0, ncol=nQ.range0)
-      rl.mean <- matrix(p.inv[2,], nrow=nQ.range0, ncol=nQ.range0)
-      rl.upp <- matrix(p.inv[3,], nrow=nQ.range0, ncol=nQ.range0)
-      
-      contour(x=Q.range0[,1], y=Q.range0[,2], z=rl.mean, levels=levels, xlab=labels[1], ylab=labels[2], lwd=2, cex.lab=cex.lab,...)
-      contour(x=Q.range0[,1], y=Q.range0[,2], z=rl.low, levels=levels, drawlabels=FALSE, add=TRUE, lty=2)
-      contour(x=Q.range0[,1], y=Q.range0[,2], z=rl.upp, levels=levels, drawlabels=FALSE, add=TRUE, lty=3)
-    }
-    
-  }
-  
-  return(p.inv)
-  
-}
-
-subset.pars <- function(model, par, sub){
-  
-  # Find subset of parameters from 3-dimensions to 2-dimensions
-  
-  # Checking the model
-  models <- c("HR", "ET", "EST")
-  if(!any(model ==  models)){ stop("model wrongly specified")}
-  
-  if(is.vector(par)){
-    dim <- dim_ExtDep(model=model, par=par)    
-  }else if(is.matrix(par)){
-    dim <- dim_ExtDep(model=model, par=par[1,])
-  }
-
-  if(length(unique(sub)) != length(sub)){stop("'sub' can only take unique values")}
-  if( all(!is.finite(sub))){stop("Check 'sub' vector")}
-  if(length(sub) > dim){stop("'sub' cannot be of greater length than the dimension of the model")}
-  if( any((sub-floor(sub))!=0) ){stop("'sub' must be a vector of integers")}
-  
-  index <- matrix(c(1,2,1,3,2,3), nrow=2, byrow=FALSE)
-  pair <- apply(index, 2, function(x) all(x==sub))
-  pair.keep <- which(pair==TRUE)
-  
-  if(model == "HR"){
-    if(is.vector(par)){
-      par.new <- par[pair.keep]      
-    }else if(is.matrix(par)){
-      par.new <- par[,pair.keep]
-    }
-  }else if(model == "ET"){
-    if(is.vector(par)){
-      par.new <- par[c(pair.keep,4)]
-    }else if(is.matrix(par)){
-      par.new <- par[,c(pair.keep,4)]
-    }  
-  }else if(model== "EST"){
-    if(is.vector(par)){
-      par.new <- par[c(pair.keep, index[,pair.keep]+3, 7)]
-    }else if(is.matrix(par)){
-      par.new <- par[,c(pair.keep, index[,pair.keep]+3, 7)]
-    }  
-  }
-  
-  if(is.matrix(par)){
-    par.new <- matrix(par.new, nrow=nrow(par))
-  }
-  
-  return(par.new)
-
-}
 
 

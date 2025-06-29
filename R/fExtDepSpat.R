@@ -1,4 +1,4 @@
-fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, alpha, par0, 
+fExtDepSpat <- function(x, model, sites, hit, jw, thresh, DoF, range, smooth, alpha, par0, 
                         acov1, acov2,
                         parallel, ncores, args1, args2, seed=123, 
                         method = "BFGS", sandwich=TRUE,
@@ -251,12 +251,15 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
   ### Parallelisation
   if(parallel){
     if(missing(ncores)){
-      message("'ncores' must be specified, setting it to 4 by default")
-      ncores <- 4
+      ncores <- parallel::detectCores(logical = FALSE)-1
+      message(paste("'ncores' must be specified, setting it to ", ncores ,"\n", sep=""))
     }
     
     cl <- makeCluster(ncores, type="PSOCK")
     registerDoParallel(cl)
+
+    on.exit({try(parallel::stopCluster(cl), silent = TRUE)}, add = TRUE)
+
   }
   
   if(model == "ET"){
@@ -265,7 +268,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
       
       if(missing(DoF) && missing(smooth) && missing(range)){
         
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>500){return(Inf)}
           if(exp(param[2])>50){return(Inf)}
           if(round(inv.logit(param[3]),6)==0 || round(inv.logit(param[3]),6)==1){return(Inf)}
@@ -276,7 +279,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
         
       }else if(missing(DoF) && missing(smooth) && !missing(range)){
         
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>500){return(Inf)}
           if(round(inv.logit(param[2]),6)==0 || round(inv.logit(param[2]),6)==1){return(Inf)}
           nllh_etr(par=param, range = range, z = z, sites = sites, hit = hit, 
@@ -286,7 +289,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
         
       }else if(missing(DoF) && !missing(smooth) && missing(range)){
         
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>500){return(Inf)}
           if(exp(param[2])>50){return(Inf)}
           nllh_ets(par=param, z = z, sites = sites, hit = hit, 
@@ -296,7 +299,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
         
       }else if(!missing(DoF) && missing(smooth) && missing(range)){
         
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[2])>50){return(Inf)}
           if(round(inv.logit(param[2]),6)==0 || round(inv.logit(param[2]),6)==1){return(Inf)}
           nllh_etf(par=param, lDoF = log(DoF), z = z, sites = sites, hit = hit, 
@@ -306,7 +309,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
         
       }else if(!missing(DoF) && !missing(smooth) && missing(range)){
         
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param)>500){return(Inf)}
           nllh_etsf(par=param, lDoF=log(DoF), z = z, sites = sites, hit = hit, 
                     smooth = smooth, split = FALSE, parallel = parallel, 
@@ -315,7 +318,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
         
       }else if(!missing(DoF) && missing(smooth) && !missing(range)){
         
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(round(inv.logit(param),6)==0 || round(inv.logit(param),6)==1){return(Inf)}
           nllh_etfr(par=param, lDoF=log(DoF), z = z, sites = sites, hit = hit, 
                     range = range, split = FALSE, parallel = parallel, 
@@ -324,7 +327,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
         
       }else if(missing(DoF) && !missing(smooth) && !missing(range)){
         
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param)>500){return(Inf)}
           nllh_etsr(par=param, smooth = smooth, z = z, sites = sites, hit = hit, 
                     range = range, split = FALSE, parallel = parallel, 
@@ -337,7 +340,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
       
       if(missing(DoF) && missing(smooth) && missing(range)){
         
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>500){return(Inf)}
           if(exp(param[2])>50){return(Inf)}
           if(round(inv.logit(param[3]),6)==0 || round(inv.logit(param[3]),6)==1){return(Inf)}
@@ -350,7 +353,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
         
       }else if(missing(DoF) && missing(smooth) && !missing(range)){
         
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>500){return(Inf)}
           if(round(inv.logit(param[2]),6)==0 || round(inv.logit(param[2]),6)==1){return(Inf)}
           nllh_etrjw(par=param, range = range, z = z, sites = sites, hit = hit, 
@@ -361,7 +364,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
         
       }else if(missing(DoF) && !missing(smooth) && missing(range)){
         
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>500){return(Inf)}
           if(exp(param[2])>50){return(Inf)}
           nllh_etsjw(par=param, z = z, sites = sites, hit = hit, 
@@ -372,7 +375,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
         
       }else if(!missing(DoF) && missing(smooth) && missing(range)){
         
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>50){return(Inf)}
           if(round(inv.logit(param[2]),6)==0 || round(inv.logit(param[2]),6)==1){return(Inf)}
           nllh_etfjw(par=param, lDoF = log(DoF), z = z, sites = sites, hit = hit, 
@@ -383,7 +386,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
         
       }else if(!missing(DoF) && !missing(smooth) && missing(range)){
         
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param)>500){return(Inf)}
           nllh_etsfjw(par=param, lDoF=log(DoF), z = z, sites = sites, hit = hit, 
                       jw = jw, cmat = cmat,
@@ -393,7 +396,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
         
       }else if(!missing(DoF) && missing(smooth) && !missing(range)){
         
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(round(inv.logit(param),6)==0 || round(inv.logit(param),6)==1){return(Inf)}
           nllh_etfrjw(par=param, lDoF=log(DoF), z = z, sites = sites, hit = hit, 
                       jw = jw, cmat = cmat,
@@ -403,7 +406,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
         
       }else if(missing(DoF) && !missing(smooth) && !missing(range)){
         
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param)>50){return(Inf)}
           nllh_etsrjw(par=param, z = z, sites = sites, hit = hit, 
                       jw = jw, cmat = cmat,
@@ -422,7 +425,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
     if(jw == Ns){ # Full likelihood
       
       if(missing(DoF) && missing(range) && missing(smooth) && missing(alpha) ){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>50){return(Inf)}
           if(exp(param[2])>500){return(Inf)}
           if(round(inv.logit(param[3]),6)==0 || round(inv.logit(param[3]),6)==1){return(Inf)}
@@ -432,7 +435,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
                    pfun = mypmvsext, args1 = args1, args2 = args2, seed = seed)
         }
       }else if(!missing(DoF) && missing(range) && missing(smooth) && missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>500){return(Inf)}
           if(round(inv.logit(param[2]),6)==0 || round(inv.logit(param[2]),6)==1){return(Inf)}
           nllh_estf(par=param, z = z, lDoF = log(DoF), sites = sites, hit = hit, 
@@ -441,7 +444,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
                     pfun = mypmvsext, args1 = args1, args2 = args2, seed = seed)
         }
       }else if(missing(DoF) && !missing(range) && missing(smooth) && missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>50){return(Inf)}
           if(round(inv.logit(param[2]),6)==0 || round(inv.logit(param[2]),6)==1){return(Inf)}
           nllh_estr(par=param, z = z, range = range, sites = sites, hit = hit, 
@@ -450,7 +453,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
                     pfun = mypmvsext, args1 = args1, args2 = args2, seed = seed)
         }
       }else if(missing(DoF) && missing(range) && !missing(smooth) && missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>50){return(Inf)}
           if(exp(param[2])>500){return(Inf)}
           nllh_ests(par=param, z = z, smooth = smooth, sites = sites, hit = hit, 
@@ -459,7 +462,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
                     pfun = mypmvsext, args1 = args1, args2 = args2, seed = seed)
         }
       }else if(missing(DoF) && missing(range) && missing(smooth) && !missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>50){return(Inf)}
           if(exp(param[2])>500){return(Inf)}
           if(round(inv.logit(param[3]),6)==0 || round(inv.logit(param[3]),6)==1){return(Inf)}
@@ -511,7 +514,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
           
         }
       }else if(!missing(DoF) && !missing(range) && missing(smooth) && missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(round(inv.logit(param[1]),6)==0 || round(inv.logit(param[1]),6)==1){return(Inf)}
           nllh_estfr(par=param, z = z, lDoF = log(DoF), range = range, sites = sites, hit = hit, 
                     acov1=acov1, acov2=acov2,
@@ -519,7 +522,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
                     pfun = mypmvsext, args1 = args1, args2 = args2, seed = seed)
         }
       }else if(!missing(DoF) && missing(range) && !missing(smooth) && missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>500){return(Inf)}
           nllh_estfs(par=param, z = z, lDoF = log(DoF), smooth = smooth, sites = sites, hit = hit, 
                     acov1 = acov1, acov2 = acov2,
@@ -527,7 +530,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
                     pfun = mypmvsext, args1 = args1, args2 = args2, seed = seed)
         }
       }else if(!missing(DoF) && missing(range) && missing(smooth) && !missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>50){return(Inf)}
           if(round(inv.logit(param[2]),6)==0 || round(inv.logit(param[2]),6)==1){return(Inf)}
           
@@ -578,7 +581,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
           
         }
       }else if(missing(DoF) && !missing(range) && !missing(smooth) && missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>50){return(Inf)}
           nllh_estrs(par=param, z = z, range = range, smooth = smooth, sites = sites, hit = hit, 
                      acov1 = acov1, acov2 = acov2,
@@ -586,7 +589,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
                      pfun = mypmvsext, args1 = args1, args2 = args2, seed = seed)
         }
       }else if(missing(DoF) && !missing(range) && missing(smooth) && !missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>50){return(Inf)}
           if(round(inv.logit(param[2]),6)==0 || round(inv.logit(param[2]),6)==1){return(Inf)}
           
@@ -638,7 +641,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
           
         }
       }else if(missing(DoF) && missing(range) && !missing(smooth) && !missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>50){return(Inf)}
           if(exp(param[2])>500){return(Inf)}
           
@@ -690,14 +693,14 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
           
         }
       }else if(!missing(DoF) && !missing(range) && !missing(smooth) && missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           nllh_estfrs(par=param, z = z, lDoF = log(DoF), range = range, smooth = smooth, sites = sites, hit = hit, 
                       acov1 = acov1, acov2 = acov2,
                       split = FALSE, parallel = parallel, 
                       pfun = mypmvsext, args1 = args1, args2 = args2, seed = seed)
         }
       }else if(!missing(DoF) && !missing(range) && missing(smooth) && !missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(round(inv.logit(param),6)==0 || round(inv.logit(param),6)==1){return(Inf)}
           
           if(any(is.na(alpha))){
@@ -747,7 +750,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
           
         }
       }else if(!missing(DoF) && missing(range) && !missing(smooth) && !missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param)>500){return(Inf)}
           
           if(any(is.na(alpha))){
@@ -797,7 +800,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
           
         }
       }else if(missing(DoF) && !missing(range) && !missing(smooth) && !missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param)>50){return(Inf)}
           
           if(any(is.na(alpha))){
@@ -847,7 +850,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
           
         }
       }else if(!missing(DoF) && !missing(range) && !missing(smooth) && !missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           
           if(any(is.na(alpha))){
             ind <- which(!is.na(alpha))
@@ -895,7 +898,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
     }else{ # Composite likelihood
       
       if(missing(DoF) && missing(range) && missing(smooth) && missing(alpha) ){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>50){return(Inf)}
           if(exp(param[2])>500){return(Inf)}
           if(round(inv.logit(param[3]),6)==0 || round(inv.logit(param[3]),6)==1){return(Inf)}
@@ -905,7 +908,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
                      pfun = mypmvsext, args1 = args1, args2 = args2, seed = seed)
         }
       }else if(!missing(DoF) && missing(range) && missing(smooth) && missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>500){return(Inf)}
           if(round(inv.logit(param[2]),6)==0 || round(inv.logit(param[2]),6)==1){return(Inf)}
           nllh_estfjw(par=param, z = z, lDoF = log(DoF), sites = sites, hit = hit, 
@@ -914,7 +917,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
                       pfun = mypmvsext, args1 = args1, args2 = args2, seed = seed)
         }
       }else if(missing(DoF) && !missing(range) && missing(smooth) && missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>50){return(Inf)}
           if(round(inv.logit(param[2]),6)==0 || round(inv.logit(param[2]),6)==1){return(Inf)}
           nllh_estrjw(par=param, z = z, range = range, sites = sites, hit = hit, 
@@ -923,7 +926,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
                       pfun = mypmvsext, args1 = args1, args2 = args2, seed = seed)
         }
       }else if(missing(DoF) && missing(range) && !missing(smooth) && missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>50){return(Inf)}
           if(exp(param[2])>500){return(Inf)}
           nllh_estsjw(par=param, z = z, smooth = smooth, sites = sites, hit = hit, 
@@ -932,7 +935,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
                       pfun = mypmvsext, args1 = args1, args2 = args2, seed = seed)
         }
       }else if(missing(DoF) && missing(range) && missing(smooth) && !missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>50){return(Inf)}
           if(exp(param[2])>500){return(Inf)}
           if(round(inv.logit(param[3]),6)==0 || round(inv.logit(param[3]),6)==1){return(Inf)}
@@ -984,7 +987,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
           
         }
       }else if(!missing(DoF) && !missing(range) && missing(smooth) && missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(round(inv.logit(param[1]),6)==0 || round(inv.logit(param[1]),6)==1){return(Inf)}
           nllh_estfrjw(par=param, z = z, lDoF = log(DoF), range = range, sites = sites, hit = hit, 
                        acov1=acov1, acov2=acov2, jw = jw, cmat = cmat,
@@ -992,7 +995,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
                        pfun = mypmvsext, args1 = args1, args2 = args2, seed = seed)
         }
       }else if(!missing(DoF) && missing(range) && !missing(smooth) && missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>500){return(Inf)}
           nllh_estfsjw(par=param, z = z, lDoF = log(DoF), smooth = smooth, sites = sites, hit = hit, 
                        acov1 = acov1, acov2 = acov2, jw = jw, cmat = cmat,
@@ -1000,7 +1003,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
                        pfun = mypmvsext, args1 = args1, args2 = args2, seed = seed)
         }
       }else if(!missing(DoF) && missing(range) && missing(smooth) && !missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>50){return(Inf)}
           if(round(inv.logit(param[2]),6)==0 || round(inv.logit(param[2]),6)==1){return(Inf)}
           
@@ -1051,7 +1054,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
           
         }
       }else if(missing(DoF) && !missing(range) && !missing(smooth) && missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>50){return(Inf)}
           nllh_estrsjw(par=param, z = z, range = range, smooth = smooth, sites = sites, hit = hit, 
                        acov1 = acov1, acov2 = acov2, jw = jw, cmat = cmat,
@@ -1059,7 +1062,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
                        pfun = mypmvsext, args1 = args1, args2 = args2, seed = seed)
         }
       }else if(missing(DoF) && !missing(range) && missing(smooth) && !missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>50){return(Inf)}
           if(round(inv.logit(param[2]),6)==0 || round(inv.logit(param[2]),6)==1){return(Inf)}
           
@@ -1111,7 +1114,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
           
         }
       }else if(missing(DoF) && missing(range) && !missing(smooth) && !missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param[1])>50){return(Inf)}
           if(exp(param[2])>500){return(Inf)}
           
@@ -1163,14 +1166,14 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
           
         }
       }else if(!missing(DoF) && !missing(range) && !missing(smooth) && missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           nllh_estfrsjw(par=param, z = z, lDoF = log(DoF), range = range, smooth = smooth, sites = sites, hit = hit, 
                         acov1 = acov1, acov2 = acov2, jw = jw, cmat = cmat,
                         split = FALSE, parallel = parallel, 
                         pfun = mypmvsext, args1 = args1, args2 = args2, seed = seed)
         }
       }else if(!missing(DoF) && !missing(range) && missing(smooth) && !missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(round(inv.logit(param),6)==0 || round(inv.logit(param),6)==1){return(Inf)}
           
           if(any(is.na(alpha))){
@@ -1220,7 +1223,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
           
         }
       }else if(!missing(DoF) && missing(range) && !missing(smooth) && !missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param)>500){return(Inf)}
           
           if(any(is.na(alpha))){
@@ -1270,7 +1273,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
           
         }
       }else if(missing(DoF) && !missing(range) && !missing(smooth) && !missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
           if(exp(param)>50){return(Inf)}
           
           if(any(is.na(alpha))){
@@ -1320,7 +1323,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
           
         }
       }else if(!missing(DoF) && !missing(range) && !missing(smooth) && !missing(alpha)){
-        nllh_tmp <- function(param, z=z, hit=hit){
+        nllh_tmp <- function(param, z, hit){
     
           if(any(is.na(alpha))){
             ind <- which(!is.na(alpha))
@@ -1369,7 +1372,7 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
     
   } # END if model == "EST"
   
-  xx <- optim(par0, nllh_tmp, z=z, hit=hit, method=method, control=control)
+  xx <- optim(par0, nllh_tmp, z=x, hit=hit, method=method, control=control)
   
   if(model == "ET"){
     
@@ -1682,25 +1685,28 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
   if(sandwich){
     
     epsVec <- rep(0.005, length(xx$par))
-    score <- matrix(nrow=nrow(z), ncol=length(xx$par))
+    score <- matrix(nrow=nrow(x), ncol=length(xx$par))
     
-    fun <- function(par){ nllh_tmp(param=par, z=z, hit=hit)}
+    fun <- function(par){ nllh_tmp(param=par, z=x, hit=hit)}
     bread <- fdhessian(fun=fun, par=xx$par, epsVec=epsVec)
     
-    for(i in 1:nrow(z)){
-        funi <- function(par){ nllh_tmp(param=par, z=matrix(z[i,], nrow=1), hit=matrix(hit[i,],nrow=1))}
+    for(i in 1:nrow(x)){
+        funi <- function(par){ nllh_tmp(param=par, z=matrix(x[i,], nrow=1), hit=matrix(hit[i,],nrow=1))}
         score[i,] <- fdjacobian(fun = funi, par = xx$par, split = FALSE, epsVec = epsVec)
     }
     
     meat <- var(score)
-    Sand <- solve(bread) %*% meat %*% solve(bread) * nrow(z)
+    INVbread <- tryCatch(chol2inv(chol(bread)), error = function(e) NULL)
+    if(is.null(INVbread)){INVbread <- tryCatch(solve(bread), error = function(e) NULL)}
+    if(is.null(INVbread)){stop("Cannot invert the bread matrix in sandwich information matrix")}
+    meatINVbread <- meat %*% INVbread
+    Sand <- INVbread %*% meatINVbread * nrow(x)
     
     sand <- sqrt(diag(Sand))
-    TIC <- -2 * ( -xx$value - matrix.trace(meat %*% solve(bread) * nrow(z)) )
+    TIC <- -2 * ( -xx$value - matrix.trace(meatINVbread * nrow(x)) )
   }
   
   if(parallel){
-    stopCluster(cl)
     gc()
     # closeAllConnections()
   }
@@ -1708,20 +1714,23 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
   if(jw < Ns){
     
     if(sandwich){
-      return(list(est=est, jw=jw, cmat=cmat, LL=-xx$value, stderr.sand=sand, TIC=TIC))
+      out <- list(model=model, est=est, jw=jw, cmat=cmat, LL=-xx$value, stderr.sand=sand, TIC=TIC)
     }else{
-      return(list(est=est, jw=jw, cmat=cmat, LL=-xx$value))
+      out <- list(model=model, est=est, jw=jw, cmat=cmat, LL=-xx$value)
     }
 
   }else{
     
     if(sandwich){
-      return(list(est=est, jw=jw, LL=-xx$value, stderr.sand=sand, TIC=TIC))
+      out <- list(model=model, est=est, jw=jw, LL=-xx$value, stderr.sand=sand, TIC=TIC)
     }else{
-      return(list(est=est, jw=jw, LL=-xx$value))
+      out <- list(model=model, est=est, jw=jw, LL=-xx$value)
     }
     
   }
+
+  class(out) <- "ExtDep_Spat"
+  return(out)
   
 }
 
@@ -2255,7 +2264,7 @@ vdfun_et <- function(z, sites, DoF, lambda, smooth, slst = list(1:d),
   
   # variances are one
   sigma <- rhomat 
-  isigma <- solve(sigma)
+  isigma <- chol2inv(chol(sigma))
   
   # calculates log(-V_{sv}) for log.p TRUE
   vsfun <- function(z, sites, sv = 1:d, log.p = TRUE) 
@@ -2275,10 +2284,9 @@ vdfun_et <- function(z, sites, DoF, lambda, smooth, slst = list(1:d),
     if(d != s) {
       tmp <- sigmaxx %*% isigmas 
       
-      Sig <- sigmaso - tmp %*% t(sigmaxx)
+      Sig <- sigmaso - tcrossprod(tmp, sigmaxx)
       if(any(diag(Sig)<=0)){return(-1e300)}
       Gam <- afun / (s + DoF) * makeSymmetric(Sig)
-      # Gam <- afun / (s + DoF) * makeSymmetric(sigmaso - tmp %*% t(sigmaxx))
       Eigen <- tryCatch(eigen(Gam)$values, error=function(e) -1) 
       if(any(Eigen<=0)){return(-1e300)}
       
@@ -4227,7 +4235,7 @@ vdfun_est <- function(z, sites, DoF, lambda, smooth, alpha, slst = list(1:d),
   
   # variances are one
   sigma <- rhomat 
-  isigma <- solve(sigma)
+  isigma <- chol2inv(chol(sigma))
   
   alphastar <- numeric(d)
   for(i in 1:d) {
@@ -4260,10 +4268,8 @@ vdfun_est <- function(z, sites, DoF, lambda, smooth, alpha, slst = list(1:d),
     sigmaxx <- sigma[-sv, sv, drop = FALSE]
     
     if(d != s) {
-      # alphabar <- as.numeric(alphas + isigmas %*% t(sigmaxx) %*% alphao /
-      #                          sqrt(1 + qf(alphao, solve(sigmaso - sigmaxx %*% isigmas %*% t(sigmaxx)))))
-      alphabar <- as.numeric( (alphas + isigmas %*% t(sigmaxx) %*% alphao) /
-                                sqrt(1 + qf(alphao, sigmaso - sigmaxx %*% isigmas %*% t(sigmaxx))))
+      alphabar <- as.numeric( (alphas + tcrossprod(isigmas, sigmaxx) %*% alphao) /
+                                sqrt(1 + qf(alphao, sigmaso - sigmaxx %*% tcrossprod(isigmas, sigmaxx))))
     } else {
       alphabar <- alpha
     }
@@ -4272,26 +4278,14 @@ vdfun_est <- function(z, sites, DoF, lambda, smooth, alpha, slst = list(1:d),
     # if sv is 1:d then mypmvt is taken as unity
     if(d != s) {
       tmp <- sigmaxx %*% isigmas 
-      Sig <- sigmaso - tmp %*% t(sigmaxx)
+      Sig <- sigmaso - tcrossprod(tmp, sigmaxx)
       if(any(diag(Sig)<=0)){return(-1e300)}
       Gam <- afun / (s + DoF) * makeSymmetric(Sig)
-      # Gam <- afun / (s + DoF) * makeSymmetric(sigmaso - tmp %*% t(sigmaxx))
       Eigen <- tryCatch(eigen(Gam)$values, error=function(e) -1) 
       if(any(Eigen<=0)){return(-1e300)}
-      #if(!isTRUE(all.equal(Gam, t(Gam)))){   # in case of rounding issues that make the covariance matrix not a covariance matrix
-      #  #warning("doing rounding of Gam matrix")
-      #  Gam <- round(Gam, abs( floor( log10(max(Gam - t(Gam))) ) )-2  )
-      #}
       mu <- as.numeric(tmp %*% zms^(1/DoF))
       alphavec <- alphao * sqrt((s + DoF)/afun) * sqrt(diag(Gam))
-      extval <- sqrt((s + DoF)/afun) * t(alphas + t(tmp) %*% alphao) %*% zms^(1/DoF) 
-      #p1 <- as.numeric(log(do.call(pfun, c(list(upper=zo^(1/DoF) - mu, sigma=Gam, df = DoF+s), args))))
-      # to avoid bug in mvtnorm (reported so should be fixed soon) NOW FIXED!
-      #if(length(zo)==1){
-      #  p1 <- as.numeric(log(do.call(pfun, c(list(upper=as.numeric((zmo^(1/DoF) - mu)/sqrt(Gam)), sigma=as.matrix(1), df = DoF+s, alpha = alphavec, ext = extval), args))))
-      #}else{
-      #  p1 <- as.numeric(log(do.call(pfun, c(list(upper=zmo^(1/DoF) - mu, sigma=Gam, df = DoF+s, alpha = alphavec, ext = extval), args)))) 
-      #}
+      extval <- sqrt((s + DoF)/afun) * crossprod(alphas + crossprod(tmp, alphao), zms^(1/DoF)) 
       p1 <- as.numeric(log(do.call(pfun, c(list(upper=zmo^(1/DoF) - mu, sigma=Gam, df = DoF+s, alpha = alphavec, ext = extval), args))))
       
     } else {

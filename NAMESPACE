@@ -1,10 +1,24 @@
-export(angular, beed.boot, beed.confband, beed,
+S3method(summary, ExtDep_Bayes)
+S3method(plot, ExtDep_Bayes)
+
+S3method(plot, ExtDep_Freq)
+S3method(logLik, ExtDep_Freq)
+S3method(logLik, ExtDep_Spat)
+
+S3method(summary, ExtDep_npBayes)
+S3method(plot, ExtDep_npBayes)
+S3method(plot, ExtDep_npFreq)
+S3method(plot, ExtDep_npEmp)
+
+
+export(angular, angular.plot, beed.boot, beed.confband, beed,
 	desn, pesn, dest, pest, dmesn, pmesn, dmest, pmest, 
-	dim_ExtDep, dExtDep, pExtDep, rExtDep,
-	fExtDep, fExtDep.np, pFailure, trans2UFrechet, trans2GEV, dGEV, pGEV, qGEV, fGEV, 
-	madogram, rExtDepSpat, fExtDepSpat,
-	index.ExtDep, plot_ExtDep, plot_ExtDep.np,
-	diagnostics, returns, summary_ExtDep, ExtQ, ellipse, simplex, PAMfmado)
+	dim_ExtDep, dExtDep, pExtDep, rExtDep, lambda.HR,
+	fExtDep, fExtDep.np, pFailure, pickands.plot, trans2UFrechet, trans2GEV, 
+	dGEV, pGEV, qGEV, fGEV, 
+	madogram, rExtDepSpat, fExtDepSpat, est, StdErr, model, method, bic, tic, 
+	index.ExtDep,
+	diagnostics, returns, returns.plot, ExtQ, ellipse, simplex, PAMfmado)
 
 
 useDynLib(ExtremalDep, .registration = TRUE)
@@ -18,10 +32,10 @@ importFrom("graphics", "contour", "image", "lines", "points", "abline",
 importFrom("stats", "df", "qf", "dnorm", "dt", "ecdf", "integrate", "optim",
            "pnorm", "pt", "quantile", "rnorm", "runif", "dunif", "uniroot",
            "var", "rpois", "dpois", "rbeta", "dbeta", "dnbinom", "pexp", 
-	       "qchisq", "pbeta", "qnorm", "cov", "rnbinom",  "approxfun", "dist", 
-	       "na.omit", "rexp", "density")
+	   "qchisq", "pbeta", "qnorm", "cov", "rnbinom",  "approxfun", "dist", 
+	   "na.omit", "rexp", "density")
 importFrom("evd", "rbvevd", "abvnonpar", "amvnonpar", "pfrechet", "pgumbel", 
-	       "pgev", "abvevd", "hbvevd")
+	   "pgev", "abvevd", "hbvevd")
 importFrom("numDeriv", "jacobian", "hessian")
 importFrom("quadprog", "solve.QP")
 importFrom("copula", "An", "An.biv")
@@ -34,3 +48,4 @@ importFrom("parallel", "makeCluster", "stopCluster")
 importFrom("doParallel", "registerDoParallel")
 importFrom("foreach", "foreach", "%dopar%")
 importFrom("cluster", "pam")
+importFrom("methods", "hasArg")

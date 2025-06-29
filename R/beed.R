@@ -147,8 +147,8 @@ beed <- function(data, x, d=3, est = c("ht","cfg","md","pick"),
       R = rbind(R1, R2, R3)
       r0 = c(r1, r2, r3) 
       
-      Dmat  <- t(Z)%*%Z          
-      dvec  <- t(y)%*%Z
+      Dmat  <- crossprod(Z)       
+      dvec  <- crossprod(y,Z)
       Rmat  <- t(R)     
       
       fit <- solve.QP(Dmat,dvec,Rmat,r0)
@@ -157,7 +157,7 @@ beed <- function(data, x, d=3, est = c("ht","cfg","md","pick"),
     }
     else beta.tilde <- beta
     
-    y.tilde <- Z%*%beta.tilde
+    y.tilde <- Z%*%beta.tilde 
     yy <- y
     
     if (plot == TRUE){
@@ -274,8 +274,8 @@ beed <- function(data, x, d=3, est = c("ht","cfg","md","pick"),
       R = rbind(R1, R2, R3)
       r0 = c(r1, r2, r3) 
       
-      Dmat  <- t(Z)%*%Z          
-      dvec  <- t(y)%*%Z
+      Dmat  <- crossprod(Z)        
+      dvec  <- crossprod(y,Z) 
       Rmat  <- t(R)     
       
       fit <- solve.QP(Dmat,dvec,Rmat,r0)
@@ -285,8 +285,8 @@ beed <- function(data, x, d=3, est = c("ht","cfg","md","pick"),
     else beta.tilde <- beta
     
     y.tilde <- rep(NA,nx)
-    if((length(zero1)==0)&(length(zeroNa)==0)&(length(zero0)==0)) y.tilde <- Z%*%beta.tilde
-    else y.tilde[-c(zero1,zeroNa,zero0)] <- Z%*%beta.tilde
+    if((length(zero1)==0)&(length(zeroNa)==0)&(length(zero0)==0)) y.tilde <-  Z%*%beta.tilde 
+    else y.tilde[-c(zero1,zeroNa,zero0)] <-  Z%*%beta.tilde
     
     if (plot == TRUE){
       if(d == 3){
@@ -313,7 +313,7 @@ beed <- function(data, x, d=3, est = c("ht","cfg","md","pick"),
   
   med <- matrix(rep(1/d,d),ncol=d)
   Zmed <- bp(med,v=vb,k=k)
-  extind <- as.numeric( d * (Zmed%*%beta.tilde) )
+  extind <-  as.numeric( d * (Zmed%*%beta.tilde) ) 
   
   out <- list(beta=beta.tilde,A=y.tilde, Anonconvex=yy, extind=extind)
   return(out)

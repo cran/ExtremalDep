@@ -28,7 +28,7 @@ ExtQ <- function(P=NULL, method="Frequentist", pU=NULL,
     
     if(length(param) != (ncol(cov)+2)){stop("Wrong length of parameter vector")}
     
-    mu <- param[1:(ncol(cov))] %*% t(cov)
+    mu <- tcrossprod(param[1:(ncol(cov))], cov)
     sigma <- param[ncol(cov)+1] 
     gamma <- param[ncol(cov)+2]
     
@@ -52,7 +52,7 @@ ExtQ <- function(P=NULL, method="Frequentist", pU=NULL,
     if(missing(param_post)){stop("Matrix of posterior parameters needs to be provided")}
     if(ncol(param_post) != (ncol(cov)+2)){stop("Wrong dimension of param_post")}
     
-    mu.ps <-  param_post[,1:(ncol(cov))] %*% t(cov)
+    mu.ps <-  tcrossprod(param_post[,1:(ncol(cov))], cov)
     sig.ps <- param_post[, ncol(cov)+1]
     gam.ps <- param_post[, ncol(cov)+2]
     

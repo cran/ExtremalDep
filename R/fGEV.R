@@ -48,7 +48,7 @@ fGEV <- function(data, par.start, method="Frequentist", u, cov,
     fit <- optim(par.start, optimfun, method=optim.method,
                     control=list(fnscale=-1, reltol=1e-14, maxit=1e8, trace=optim.trace), hessian=TRUE)
     
-    varcov <- try(-solve(fit$hessian), silent = TRUE)
+    varcov <- try(-chol2inv(chol(fit$hessian)), silent = TRUE)
     if(!is.matrix(varcov)){
       varcov <- 'none'
       stderr <- 'none'
@@ -281,7 +281,7 @@ update.sig <- function(sig, acc, d = d, p = p, alpha = alpha, i) {
 update.cov<-function(sigMat, i, thetaM, theta, d){
   epsilon=1/i
   thetaM2=((thetaM*i)+theta)/(i+1)
-  sigMat=(i-1)/i*sigMat + thetaM%*%t(thetaM)-(i+1)/i*thetaM2%*%t(thetaM2)+1/i*theta%*%t(theta) + epsilon*diag(d)
+  sigMat=(i-1)/i*sigMat + tcrossprod(thetaM)-(i+1)/i*tcrossprod(thetaM2)+1/i*tcrossprod(theta) + epsilon*diag(d)
   return(list(sigMat=sigMat, thetaM=thetaM2))
 }
 

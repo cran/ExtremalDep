@@ -10,17 +10,16 @@
 }
 
 \usage{
-returns(out, summary.mcmc, y, plot=FALSE, labels=NULL, 
-        data=NULL)
+returns(x, summary.mcmc, y, plot=FALSE, data=NULL, ...)
 }
 
 \arguments{
-  \item{out}{The output of the \code{\link{fExtDep.np}} function with \code{method="Bayesian"}.}
-  \item{summary.mcmc}{The output of the \code{\link{summary_ExtDep}} function.}
+  \item{x}{An object of class \code{ExtDep_npBayes}, the output of the \code{\link{fExtDep.np}} function with \code{method="Bayesian"}.}
+  \item{summary.mcmc}{The output of the \code{\link{summary.ExtDep_npBayes}} function.}
   \item{y}{A 2-column matrix of unobserved thresholds.}
-  \item{plot}{A logical value; if \code{TRUE}, then the returns are plotted using \code{\link{plot_ExtDep.np}}.}
-  \item{labels}{As in \code{\link{plot_ExtDep.np}}. Required if \code{plot=TRUE}.}
-  \item{data}{As in \code{\link{plot_ExtDep.np}}. Required if \code{plot=TRUE}.}    
+  \item{plot}{A logical value; if \code{TRUE}, then the returns are plotted using \code{\link{plot.ExtDep_npBayes}}.}
+  \item{data}{As in \code{\link{plot.ExtDep_npBayes}}. Required if \code{plot=TRUE}.}
+  \item{...}{Additional graphical parameters when \code{plot=TRUE}. See \code{\link{plot.ExtDep_npBayes}}.}
 }
 
 \details{
@@ -86,11 +85,11 @@ mm_gbp_jpy_filt <- mm_gbp_jpy - rowSums(seas_jpy$time.series[,-3])
 mm_gbp <- cbind(as.vector(mm_gbp_usd_filt), as.vector(mm_gbp_jpy_filt))
 
 hyperparam <- list(mu.nbinom = 3.2, var.nbinom = 4.48)
-gbp_mar <- fExtDep.np(method="Bayesian", data=mm_gbp, par10=rep(0.1, 3), 
+gbp_mar <- fExtDep.np(x=mm_gbp, method="Bayesian", par10=rep(0.1, 3), 
                       par20=rep(0.1,3), sig10=0.0001, sig20=0.0001, k0=5,
                       hyperparam = hyperparam, nsim=5e+4)
 
-gbp_mar_sum <- summary_ExtDep(mcmc=gbp_mar, burn=3e+4, plot=TRUE)
+gbp_mar_sum <- summary(object=gbp_mar, burn=3e+4, plot=TRUE)
 
 mm_gbp_range <- apply(mm_gbp,2,quantile,c(0.9,0.995))
 
@@ -98,8 +97,8 @@ y_gbp_usd <- seq(from=mm_gbp_range[1,1], to=mm_gbp_range[2,1], length=20)
 y_gbp_jpy <- seq(from=mm_gbp_range[1,2], to=mm_gbp_range[2,2], length=20)
 y <- as.matrix(expand.grid(y_gbp_usd, y_gbp_jpy, KEEP.OUT.ATTRS = FALSE))
 
-ret_marg <- returns(out=gbp_mar, summary.mcmc=gbp_mar_sum, y=y, plot=TRUE, 
-                    data=mm_gbp, labels=c("GBP/USD exchange rate", "GBP/JPY exchange rate"))
+ret_marg <- returns(x=gbp_mar, summary.mcmc=gbp_mar_sum, y=y, plot=TRUE, 
+                    data=mm_gbp, xlab="GBP/USD exchange rate", ylab="GBP/JPY exchange rate")
 
 }
 
@@ -121,12 +120,12 @@ mcmc <- fExtDep.np(method="Bayesian", data=data, mar.fit=FALSE, k0=5,
                    hyperparam=hyperparam, nsim=5e+5)
 
 w <- seq(0.001, 0.999, length=100)
-summary.mcmc <- summary_ExtDep(w, mcmc, burn=4e+5, plot=TRUE)
+summary.mcmc <- summary(object=mcmc, w=w, burn=4e+5, plot=TRUE)
 
-plot_ExtDep.np(out=mcmc, type = "A", summary.mcmc=summary.mcmc)
-plot_ExtDep.np(out=mcmc, type = "h", summary.mcmc=summary.mcmc)
-plot_ExtDep.np(out=mcmc, type = "pm", summary.mcmc=summary.mcmc)
-plot_ExtDep.np(out=mcmc, type = "k", summary.mcmc=summary.mcmc)
+plot(x=mcmc, type = "A", summary.mcmc=summary.mcmc)
+plot(x=mcmc, type = "h", summary.mcmc=summary.mcmc)
+plot(x=mcmc, type = "pm", summary.mcmc=summary.mcmc)
+plot(x=mcmc, type = "k", summary.mcmc=summary.mcmc)
 
 y <- seq(10,100,2)
 y <- as.matrix(expand.grid(y,y))

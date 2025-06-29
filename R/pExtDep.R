@@ -462,7 +462,7 @@ p.est <- function(q, par, type){
   
   Sigma_j <-function(rho,j){
     Sig <- Sigma(rho)
-    return(Sig[-j,-j] - Sig[-j,j] %*% t(Sig[j,-j]) )
+    return(Sig[-j,-j] - tcrossprod(Sig[-j,j], Sig[j,-j]) )
   }
   
   s_j <- function(rho,j){
@@ -478,7 +478,8 @@ p.est <- function(q, par, type){
   Sigma_bar_j <- function(rho,j){
     sigma_j <- Sigma_j(rho,j)
     sj <- s_j(rho,j)
-    return( solve(sj) %*% t(sigma_j) %*% solve(sj) )
+    sj_inv <- chol2inv(chol(sj))
+    return(tcrossprod(sj_inv, sigma_j) %*% sj_inv)
   }
   
   alpha_tilde <- function(alpha,j){
@@ -490,8 +491,8 @@ p.est <- function(q, par, type){
     sigma_j <- Sigma_j(rho,j)
     Alpha_tilde <- alpha_tilde(alpha,j)
     
-    num <- alpha[j] + Sig[j,-j] %*% t(Alpha_tilde)
-    denom <- sqrt( 1 + Alpha_tilde %*% t(sigma_j) %*% t(Alpha_tilde)  )
+    num <- alpha[j] + tcrossprod(Sig[j,-j], Alpha_tilde)
+    denom <- sqrt( 1 + tcrossprod(tcrossprod(Alpha_tilde, sigma_j), Alpha_tilde)  )
     return(num/denom)
   }
   
@@ -504,7 +505,7 @@ p.est <- function(q, par, type){
   tau_star_j <- function(rho,alpha,nu,j){
     Sig <- Sigma(rho)
     Alpha_tilde <- alpha_tilde(alpha,j)
-    return( sqrt(nu+1) * (alpha[j] + Sig[-j,j] %*% t(Alpha_tilde) )     )
+    return( sqrt(nu+1) * (alpha[j] + tcrossprod(Sig[-j,j], Alpha_tilde) )     )
   }
   
   nu_p <- function(rho,alpha,nu,j){

@@ -1,19 +1,23 @@
 \name{fExtDepSpat}
 \alias{fExtDepSpat}
+\alias{logLik.ExtDep_Spat}
 
 \title{Fitting of a max-stable process}
 \description{This function uses the Stephenson-Tawn likelihood to estimate parameters of max-stable models.}
 
 \usage{
-fExtDepSpat(model, z, sites, hit, jw, thresh, DoF, range, smooth, 
+fExtDepSpat(x, model, sites, hit, jw, thresh, DoF, range, smooth, 
             alpha, par0, acov1, acov2, parallel, ncores, args1, args2, 
             seed=123, method = "BFGS", sandwich=TRUE,
             control = list(trace=1, maxit=50, REPORT=1, reltol=0.0001))
+            
+\method{logLik}{ExtDep_Spat} (object, ...)
 }
 
 \arguments{
+  \item{x}{A \eqn{(n \times d)}{(n x d)} matrix containing \eqn{n}{n} observations at \eqn{d}{d} locations (\code{fExtDepSpat}).}
+  \item{object}{an object of class \code{ExtDep_Spat} (\code{logLik}).}
 	\item{model}{A character string indicating the max-stable model, currently extremal-t (\code{"ET"}) and extremal skew-t (\code{"EST"}) only available. Note that the Schlather model can be obtained as a special case by specifying the extremal-t model with \code{DoF=1}}
-	\item{z}{A \eqn{(n \times d)}{(n x d)} matrix containing \eqn{n}{n} observations at \eqn{d}{d} locations.}
 	\item{sites}{A \eqn{(d \times 2)}{(d x 2)} matrix corresponding to the coordinates of locations where the processes is simulated. Each row corresponds to a location.}
 	\item{hit}{A \eqn{(n \times d)}{(n x d)} matrix containing the hitting scenarios for each observations.}
 	\item{jw}{An integer between \eqn{2}{2} and \eqn{d}{d}, indicating the tuples considered in the composite likelihood. If \code{jw=d} the full likelihood is considered.}
@@ -31,11 +35,12 @@ fExtDepSpat(model, z, sites, hit, jw, thresh, DoF, range, smooth,
 	\item{method}{A character string indicating the optimisation method to be used. See \code{\link{optim}} for more details.}
 	\item{sandwich}{A logical value; if \code{TRUE} the standard errors of the estimates are computed from the Sandwich (Godambe) information matrix.}
 	\item{control}{A list of control parameter for the optimisation. See \code{\link{optim}} for more details.}
+	\item{...}{For the \code{logLik()} function: can provide a \code{digits} argument, an integer indicating the number of decimal places to be reported.}
 }
 
 \details{
   This routine follows the methodology developped by Beranger et al. (2021). It uses on the Stephenson-Tawn which relies on the knowledge of time occurrences of each block maxima. Rather than considering all partitions of the set \eqn{\{1, \ldots,d\}}{{1,\ldots,d}}, the likelihood is computed using the observed partition. Let \eqn{\Pi = (\pi_1, \ldots, \pi_K)}{\Pi = (\pi_1, \ldots, \pi_K)} denote the observed partition, then the Stephenson-Tawn likelihood is given by
-\deqn{L(\theta;z) = \exp \left\{ - V(z;\theta) \right\} \times \prod^{K}_{k=1} - V_{\pi_k}(z;\theta),}{L(\theta;z) = \exp {- V(z;\theta)} x \prod^{K}_{k=1} - V_{\pi_k}(z;\theta),} where \eqn{V_{\pi}}{V_\pi} represents the partial derivative(s) of \eqn{V(z;\theta)}{V(z;\theta)} with respect to \eqn{\pi}{\pi}.
+\deqn{L(\theta;x) = \exp \left\{ - V(x;\theta) \right\} \times \prod^{K}_{k=1} - V_{\pi_k}(x;\theta),}{L(\theta;x) = \exp {- V(x;\theta)} x \prod^{K}_{k=1} - V_{\pi_k}(x;\theta),} where \eqn{V_{\pi}}{V_\pi} represents the partial derivative(s) of \eqn{V(x;\theta)}{V(x;\theta)} with respect to \eqn{\pi}{\pi}.
 
   When \code{jw=d} the full Stephenson-Tawn likelihood is considered whereas for values lower than \eqn{d}{d} a composite likelihood approach is taken. 
   
@@ -45,7 +50,8 @@ fExtDepSpat(model, z, sites, hit, jw, thresh, DoF, range, smooth,
 }
 
 \value{
-  A list comprising of the vector of estimated parameters (\code{est}), the composite likelihood order (\code{jw}), the maximised log-likelihood value (\code{LL}). In addition, if \code{sandwich=TRUE} the the standard errors from the sandwich information matrix are reported via \code{stderr.sand} as well as the TIC for model selection (\code{TIC}). Finally, if the composite likelihood is considered, a matrix with all tuples considered with a weight of 1 are reported in \code{cmat}. 
+  \code{fExtDepSpat}: An object of class \code{ExtDep_Spat} in the form of a list comprising of the vector of estimated parameters (\code{est}), the composite likelihood order (\code{jw}), the maximised log-likelihood value (\code{LL}). In addition, if \code{sandwich=TRUE} the the standard errors from the sandwich information matrix are reported via \code{stderr.sand} as well as the TIC for model selection (\code{TIC}). Finally, if the composite likelihood is considered, a matrix with all tuples considered with a weight of 1 are reported in \code{cmat}. 
+  \code{logLik}: The value of the maximised log-likelihood.
 }
 
 \author{
@@ -73,7 +79,7 @@ for(i in 1:2) sites[,i] <- sites[,i] - mean(sites[,i])
 
 # Simulation of 50 replicates from the Extremal-t model
 Ny <- 50
-z <- rExtDepSpat(Ny, sites, model="ET", cov.mod="powexp", DoF=1, 
+x <- rExtDepSpat(Ny, sites, model="ET", cov.mod="powexp", DoF=1, 
                  range=3, nugget=0, smooth=1.5, 
                  control=list(method="exact"))
                  
@@ -81,10 +87,10 @@ z <- rExtDepSpat(Ny, sites, model="ET", cov.mod="powexp", DoF=1,
 args1 <- list(Nmax=50L, Nmin=5L, eps=0.001, logeps=FALSE)
 args2 <- list(Nmax=500L, Nmin=50L, eps=0.001, logeps=TRUE)
 \dontrun{
-fit1 <- fExtDepSpat(model="ET", z=z$vals, sites=sites, hit=z$hits,
+fit1 <- fExtDepSpat(x=x$vals, model="ET", sites=sites, hit=x$hits,
                     par0=c(3,1,1), parallel=TRUE, ncores=6,
                     args1=args1, args2=args2, control = list(trace=0))
-fit1$est
+stderr(fit1)
 }
 }
 

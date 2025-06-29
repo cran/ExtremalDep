@@ -4,7 +4,7 @@ ellipse <- function(center=c(0,0), alpha=c(0,0), sigma=diag(2), df=1, prob=0.01,
   e1 <- es$vec %*% diag(sqrt(es$val))
   
   if(!all(alpha==0)){
-    h <- 2*log(1+exp(-1.544/sqrt(alpha%*%sigma%*%t(alpha))))
+    h <- 2*log(1+exp(-1.544/sqrt(alpha%*% tcrossprod(sigma,alpha))))
     r1 <- sqrt(qchisq(prob, 2))-h
   }else{
     r1 <- sqrt(2*qf(prob, 2, df))
@@ -12,7 +12,7 @@ ellipse <- function(center=c(0,0), alpha=c(0,0), sigma=diag(2), df=1, prob=0.01,
   
   theta <- seq(0, 2*pi, len=npoints)
   v1 <- cbind(r1 * cos(theta), r1 * sin(theta))
-  pts <- t(center - (e1 %*% t(v1)))
+  pts <- t(center - tcrossprod(e1, v1))
   if(pos) pts <- pts[pts[,1]>=0 & pts[,2]>=0, ]
   return(pts)
   

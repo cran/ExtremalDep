@@ -47,7 +47,7 @@ index.ExtDep <- function(object, model, par, x, u){
       if(length(x)==2 && length(par)==2){
         par2 <- c(par[1], rep(0,2), par[2])
       }
-      if(length(x)==3 && length(par)==7){
+      if(length(x)==3 && length(par)==4){
         par2 <- c(par[1:3], rep(0,3), par[4])
       }
       return(pk.extst(x=x, param=par2))

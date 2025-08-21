@@ -1,6 +1,6 @@
 Package: ExtremalDep
-Version: 0.0.4-5
-Date: 2025-06-21
+Version: 1.0.0
+Date: 2025-08-15
 Title: Extremal Dependence Models
 Authors@R: c(person("Boris","Beranger", role = "aut", email="borisberanger@gmail.com"),
 	    person("Simone","Padoan", role = c("cre","aut"), email="simone.padoan@unibocconi.it"),
@@ -33,7 +33,7 @@ Repository: CRAN
 Repository/R-Forge/Project: extremaldep
 Repository/R-Forge/Revision: 107
 Repository/R-Forge/DateTimeStamp: 2019-08-12 22:22:37
-Date/Publication: 2025-06-29 08:50:02 UTC
-Packaged: 2025-06-29 07:47:24 UTC; borisberanger
+Date/Publication: 2025-08-21 11:40:02 UTC
+Packaged: 2025-08-21 00:01:36 UTC; borisberanger
 Depends: R (>= 3.5.0)
 URL: https://faculty.unibocconi.it/simonepadoan/

@@ -6,8 +6,8 @@
 \description{Density function, distribution function for the univariate extended skew-normal (\acronym{ESN}) distribution.}
 
 \usage{
-desn(x, location=0, scale=1, shape=0, extended=0)
-pesn(x, location=0, scale=1, shape=0, extended=0)
+desn(x, location = 0, scale = 1, shape = 0, extended = 0)
+pesn(x, location = 0, scale = 1, shape = 0, extended = 0)
 }
 
 \arguments{
@@ -20,8 +20,8 @@ pesn(x, location=0, scale=1, shape=0, extended=0)
 
 \value{
 	density (\code{desn}), probability (\code{pesn}) from the extended skew-normal distribution with given
-	\code{location}, \code{scale}, \code{shape} and \code{extended} parameters or from the skew-normal if \code{extended=0}.
-	If \code{shape=0} and \code{extended=0} then the normal distribution is recovered.
+	\code{location}, \code{scale}, \code{shape} and \code{extended} parameters or from the skew-normal if \code{extended = 0}.
+	If \code{shape = 0} and \code{extended = 0} then the normal distribution is recovered.
  }
 
 \references{
@@ -36,14 +36,14 @@ Azzalini, A. with the collaboration of Capitanio, A. (2014).
 
 \examples{
 
-dens1 <- desn(x=1, shape=3, extended=2)
-dens2 <- desn(x=1, shape=3)
-dens3 <- desn(x=1)
-dens4 <- dnorm(x=1)
-prob1 <- pesn(x=1, shape=3, extended=2)
-prob2 <- pesn(x=1, shape=3)
-prob3 <- pesn(x=1)
-prob4 <- pnorm(q=1)
+dens1 <- desn(x = 1, shape = 3, extended = 2)
+dens2 <- desn(x = 1, shape = 3)
+dens3 <- desn(x = 1)
+dens4 <- dnorm(x = 1)
+prob1 <- pesn(x = 1, shape = 3, extended = 2)
+prob2 <- pesn(x = 1, shape = 3)
+prob3 <- pesn(x = 1)
+prob4 <- pnorm(q = 1)
 
 }
 

@@ -5,8 +5,8 @@
 Estimates the Pickands dependence function corresponding to multivariate data on the basis of a Bernstein polynomials approximation.
 }
 \usage{
-beed(data, x, d = 3, est = c("ht","cfg","md","pick"),
-     margin = c("emp","est","exp","frechet","gumbel"),
+beed(data, x, d = 3, est = c("ht", "cfg", "md", "pick"),
+     margin = c("emp", "est", "exp", "frechet", "gumbel"),
      k = 13, y = NULL, beta = NULL, plot = FALSE)
 }
 \arguments{
@@ -14,13 +14,13 @@ beed(data, x, d = 3, est = c("ht","cfg","md","pick"),
   \item{x}{\eqn{(m \times d)}{(m x d)} design matrix where the dependence
     function is evaluated (see \bold{Details}).}
   \item{d}{positive integer greater than or equal to two indicating the number of variables (\code{d = 3} by default).}
-  \item{est}{string, indicating the estimation method (\code{est="md"} by default, see \bold{Details}).}
-  \item{margin}{string, denoting the type marginal distributions (\code{margin="emp"} by default, see \bold{Details}).}
+  \item{est}{string, indicating the estimation method (\code{est = "md"} by default, see \bold{Details}).}
+  \item{margin}{string, denoting the type marginal distributions (\code{margin = "emp"} by default, see \bold{Details}).}
   \item{k}{postive integer, indicating the order of Bernstein
-    polynomials (\code{k=13} by default).}
+    polynomials (\code{k = 13} by default).}
   \item{y}{numeric vector (of size \code{m}) with an initial estimate of the Pickands function. If \code{NULL}, the initial estimate is computed using the estimation method denoted in \code{est}.}
   \item{beta}{vector of polynomial coefficients (see \bold{Details}).}
-  \item{plot}{logical; if \code{TRUE} and \code{d<=3}, the estimated Pickands dependence function is plotted (\code{FALSE} by default).}
+  \item{plot}{logical; if \code{TRUE} and \code{d <= 3}, the estimated Pickands dependence function is plotted (\code{FALSE} by default).}
 }
 
 
@@ -51,7 +51,7 @@ S_d := { (w_1,..., w_d) in [0,1]^{d}: \sum_{i=1}^{d} w_i = 1}.
   The order of polynomial \code{k} controls the smoothness of the estimate. The higher \code{k} is, the smoother the final estimate is.
   Higher values are better with strong dependence (e. g. \code{k = 23}), whereas small values (e.g. \code{k = 6} or \code{k = 10}) are enough with mild or weak dependence.
 
-An empirical transformation of the marginals is performed when \code{margin="emp"}. A max-likelihood fitting of the GEV distributions is implemented when \code{margin="est"}. Otherwise it refers to marginal parametric GEV theorethical distributions (\code{margin = "exp", "frechet", "gumbel"}).
+An empirical transformation of the marginals is performed when \code{margin = "emp"}. A max-likelihood fitting of the GEV distributions is implemented when \code{margin="est"}. Otherwise it refers to marginal parametric GEV theorethical distributions (\code{margin = "exp", "frechet", "gumbel"}).
 }
 
 \note{
@@ -90,9 +90,9 @@ With the estimated polynomial coefficients, the extremal coefficient, i.e. \eqn{
 \examples{
 
 x <- simplex(2)
-data <- evd::rbvevd(50, dep = 0.4, model = "log", mar1 = c(1,1,1))
+data <- evd::rbvevd(50, dep = 0.4, model = "log", mar1 = c(1, 1, 1))
 
-Amd <- beed(data, x, 2, "md", "emp", 20, plot=TRUE)
+Amd <- beed(data, x, 2, "md", "emp", 20, plot = TRUE)
 Acfg <- beed(data, x, 2, "cfg", "emp", 20)
 Aht <- beed(data, x, 2, "ht", "emp", 20)
 
@@ -106,12 +106,12 @@ lines(x[,1], Acfg$A, lty = 1, col = 2)
 \donttest{
 x <- simplex(3)
 
-data <- evd::rmvevd(50, dep = 0.8, model = "log", d = 3, mar = c(1,1,1))
+data <- evd::rmvevd(50, dep = 0.8, model = "log", d = 3, mar = c(1, 1, 1))
 
-op <- par(mfrow=c(1,3))
-Amd <- beed(data, x, 3, "md", "emp", 18, plot=TRUE)
-Acfg <- beed(data, x, 3, "cfg", "emp", 18, plot=TRUE)
-Aht <- beed(data, x, 3, "ht", "emp", 18, plot=TRUE)
+op <- par(mfrow=c(1, 3))
+Amd <- beed(data, x, 3, "md", "emp", 18, plot = TRUE)
+Acfg <- beed(data, x, 3, "cfg", "emp", 18, plot = TRUE)
+Aht <- beed(data, x, 3, "ht", "emp", 18, plot = TRUE)
 
 par(op)
 }

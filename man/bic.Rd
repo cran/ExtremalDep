@@ -5,7 +5,7 @@
 \description{This function extract the BIC value from a fitted object..}
 
 \usage{
-bic(x, digits=3)
+bic(x, digits = 3)
 }
 
 \arguments{
@@ -29,9 +29,10 @@ bic(x, digits=3)
 \examples{
 \dontrun{
 data(pollution)
-Hpar.hr <- list(mean.lambda=0, sd.lambda=3)
-PNS.hr <- fExtDep(x=PNS, method="BayesianPPP", model = "HR", 
-                  Nsim=5e+4, Nbin=3e+4, Hpar=Hpar.hr, MCpar=0.35, seed=14342)
+Hpar.hr <- list(mean.lambda = 0, sd.lambda = 3)
+PNS.hr <- fExtDep(x = PNS, method = "BayesianPPP", model = "HR", 
+                  Nsim = 5e+4, Nbin = 3e+4, Hpar = Hpar.hr, 
+                  MCpar = 0.35, seed = 14342)
 bic(PNS.hr)
 }
 }

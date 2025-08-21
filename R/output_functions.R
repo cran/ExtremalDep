@@ -1,23 +1,21 @@
-est <- function(x, digits=3){
-  
-  if(inherits(x,"ExtDep_Bayes")){
-    out <- round(x$emp.mean,digits)
-  }else if(inherits(x,"ExtDep_Freq")){
-    out <- round(x$par,digits)
-  }else if(inherits(x,"ExtDep_Spat")){
-    out <- round(x$est,digits)
-  }else{
+est <- function(x, digits = 3) {
+  if (inherits(x, "ExtDep_Bayes")) {
+    out <- round(x$emp.mean, digits)
+  } else if (inherits(x, "ExtDep_Freq")) {
+    out <- round(x$par, digits)
+  } else if (inherits(x, "ExtDep_Spat")) {
+    out <- round(x$est, digits)
+  } else {
     stop("`x` must be of class `ExtDep_Bayes`, `ExtDep_Freq` or `ExtDep_Spat`.")
   }
 
   return(out)
 }
 
-model <- function(x){
-  
-  if(inherits(x,c("ExtDep_Bayes", "ExtDep_Freq", "ExtDep_Spat"))){
+model <- function(x) {
+  if (inherits(x, c("ExtDep_Bayes", "ExtDep_Freq", "ExtDep_Spat"))) {
     out <- x$model
-  }else{
+  } else {
     stop("`x` must be of class `ExtDep_Bayes`, `ExtDep_Freq` or `ExtDep_Spat`.")
   }
 
@@ -25,23 +23,22 @@ model <- function(x){
 }
 
 
-method <- function(x){
-  
-  if(inherits(x,"ExtDep_Bayes")){
+method <- function(x) {
+  if (inherits(x, "ExtDep_Bayes")) {
     out <- "Bayesian model averaging"
-  }else if(inherits(x,"ExtDep_Freq")){
-    if(all(rowSums(x$data)==1)){
+  } else if (inherits(x, "ExtDep_Freq")) {
+    if (all(rowSums(x$data) == 1)) {
       out <- "Poisson Point Process"
-    }else{
+    } else {
       out <- "Pairwise composite likelihood"
     }
-  }else if(inherits(x,"ExtDep_Spat")){
-    if("cmat" %in% names(x)){
-      out <- paste(x$jw, "-wise composite likelihood", sep="")
-    }else{
-      out <- "Full likelihood"      
+  } else if (inherits(x, "ExtDep_Spat")) {
+    if ("cmat" %in% names(x)) {
+      out <- paste(x$jw, "-wise composite likelihood", sep = "")
+    } else {
+      out <- "Full likelihood"
     }
-  }else{
+  } else {
     stop("`x` must be of class `ExtDep_Bayes`, `ExtDep_Freq` or `ExtDep_Spat`.")
   }
 
@@ -49,11 +46,10 @@ method <- function(x){
 }
 
 
-tic <- function(x, digits=3){
-  
-  if(inherits(x,c("ExtDep_Freq", "ExtDep_Spat"))){
-    out <- round(x$TIC,digits)
-  }else{
+tic <- function(x, digits = 3) {
+  if (inherits(x, c("ExtDep_Freq", "ExtDep_Spat"))) {
+    out <- round(x$TIC, digits)
+  } else {
     stop("`x` must be of class `ExtDep_Freq` or `ExtDep_Spat`.")
   }
 
@@ -61,11 +57,10 @@ tic <- function(x, digits=3){
 }
 
 
-bic <- function(x, digits=3){
-  
-  if(inherits(x,"ExtDep_Bayes")){
-    out <- round(x$BIC,digits)
-  }else{
+bic <- function(x, digits = 3) {
+  if (inherits(x, "ExtDep_Bayes")) {
+    out <- round(x$BIC, digits)
+  } else {
     stop("`x` must be of class `ExtDep_Bayes`.")
   }
 
@@ -78,15 +73,14 @@ bic <- function(x, digits=3){
 # }
 
 
-StdErr <- function(x, digits=3){
-  
-  if(inherits(x,"ExtDep_Bayes")){
-    out <- round(x$emp.sd,digits)
-  }else if(inherits(x,"ExtDep_Freq")){
-    out <- round(x$SE,digits)
-  }else if(inherits(x,"ExtDep_Spat")){
-    out <- round(x$stderr.sand,digits)
-  }else{
+StdErr <- function(x, digits = 3) {
+  if (inherits(x, "ExtDep_Bayes")) {
+    out <- round(x$emp.sd, digits)
+  } else if (inherits(x, "ExtDep_Freq")) {
+    out <- round(x$SE, digits)
+  } else if (inherits(x, "ExtDep_Spat")) {
+    out <- round(x$stderr.sand, digits)
+  } else {
     stop("`x` must be of class `ExtDep_Bayes`, `ExtDep_Freq` or `ExtDep_Spat`.")
   }
 
@@ -110,7 +104,7 @@ StdErr <- function(x, digits=3){
 
 
 # LogLik <- function(x, digits=3){
-  
+
 #   if(class(x) %in% c("ExtDep_Freq", "ExtDepSpat")){
 #     out <- round(x$TIC,digits)
 #   }else{
@@ -120,32 +114,27 @@ StdErr <- function(x, digits=3){
 #   return(out)
 # }
 
-logLik.ExtDep_Freq <- function(object, ...){
+logLik.ExtDep_Freq <- function(object, ...) {
   # object is an object of class "ExtDep_Freq"
 
   args <- list(...)
   if ("digits" %in% names(args)) {
-   out <- round(object$LL, args$digits)
-  }else{
-   out <- object$LL
+    out <- round(object$LL, args$digits)
+  } else {
+    out <- object$LL
   }
 
   return(out)
 }
 
-logLik.ExtDep_Spat <- function(object, ...){
+logLik.ExtDep_Spat <- function(object, ...) {
   # object is an object of class "ExtDep_Spat"
   args <- list(...)
   if ("digits" %in% names(args)) {
-   out <- round(object$LL, args$digits)
-  }else{
-   out <- object$LL
+    out <- round(object$LL, args$digits)
+  } else {
+    out <- object$LL
   }
 
   return(out)
 }
-
-
-
-
-

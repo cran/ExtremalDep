@@ -31,3 +31,9 @@ A set of procedures for parametric and non-parametric modelling of the dependenc
 - Define outputs of `fExtDep()`, `fExtDep.np()` and `fExtDepSpat()` to be of class `ExtDep_Freq`, `ExtDep_Bayes`, `ExtDep_npFreq`, `ExtDep_npBayes`, `ExtDep_npEmp` and `ExtDep_Spat`;
 - Make use of class methods for `plot()` and `summary()` functions replacing the previous `plot.ExtDep()`, etc;
 - New `est()`, `StdErr()`, `logLik()`, `bic()`, `tic()` to extract outputs from objects of class `ExtDep_Freq`, `ExtDep_Bayes` and `ExtDep_Spat`.	
+
+# Version 1.0.0 updates:
+
+- Version number has been updated to reflect the regular construction  <major>.<minor>.<patch>.
+- Improved formatting across all `.R` files using the `styler` package.
+- Improved formatting of all manual (`.Rd`) files to follow the tidyverse style guide (spacing, indentation, line width, ...).

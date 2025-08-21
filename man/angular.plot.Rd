@@ -16,11 +16,11 @@ angular.plot(model, par, log, contour, labels, cex.lab, cex.cont, ...)
 	\item{labels}{A vector of character strings indicating the labels. Must be of length \eqn{1}{1} for bivariate models and \eqn{3}{3} for trivariate models.}
   \item{cex.lab}{A positive real indicating the size of the labels.}
   \item{cex.cont}{A positive real indicating the size of the contour labels.}
-  \item{...}{Additional graphical arguments for the \code{hist()} function when \code{style="hist"}.}
+  \item{...}{Additional graphical arguments for the \code{hist()} function when \code{style = "hist"}.}
 }
 
 \details{
-  The angular density is computed using the function \code{\link{dExtDep}} with arguments \code{method="Parametric"} and \code{angular=TRUE}.
+  The angular density is computed using the function \code{\link{dExtDep}} with arguments \code{method = "Parametric"} and \code{angular = TRUE}.
   
   When contours are displayed, levels are chosen to be the deciles. 
 }
@@ -37,9 +37,9 @@ angular.plot(model, par, log, contour, labels, cex.lab, cex.cont, ...)
 
 \examples{
 
-angular.plot(model="HR", par=0.6)
+angular.plot(model = "HR", par = 0.6)
 \dontrun{
-angular.plot(model="ET", par=c(0.6, 0.2, 0.5, 2))
+angular.plot(mode = "ET", par = c(0.6, 0.2, 0.5, 2))
 }
 
 }

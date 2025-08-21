@@ -11,5 +11,3 @@
 ### of some family of skew-symmetric models     ###
 ### Last change: 27/11/2014                         ###
 #######################################################
-
-

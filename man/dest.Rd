@@ -6,8 +6,8 @@
 \description{Density function, distribution function for the univariate extended skew-t (\acronym{EST}) distribution.}
 
 \usage{
-dest(x, location=0, scale=1, shape=0, extended=0, df=Inf)
-pest(x, location=0, scale=1, shape=0, extended=0, df=Inf)
+dest(x, location = 0, scale = 1, shape = 0, extended = 0, df = Inf)
+pest(x, location = 0, scale = 1, shape = 0, extended = 0, df = Inf)
 }
 
 \arguments{
@@ -17,14 +17,14 @@ pest(x, location=0, scale=1, shape=0, extended=0, df=Inf)
 	\item{shape}{skewness parameter. \code{0} is the default.}
 	\item{extended}{extension parameter. \code{0} is the default.}
 	\item{df}{a single positive value representing the degrees of freedom;
-  		it can be non-integer. Default value is \code{nu=Inf} which corresponds
+  		it can be non-integer. Default value is \code{nu = Inf} which corresponds
   		to the skew-normal distribution.}
 }
 
 \value{
 	density (\code{dest}), probability (\code{pest}) from the extended skew-t distribution with given
-	\code{location}, \code{scale}, \code{shape}, \code{extended} and \code{df} parameters or from the skew-t if \code{extended=0}.
-	If \code{shape=0} and \code{extended=0} then the t distribution is recovered.
+	\code{location}, \code{scale}, \code{shape}, \code{extended} and \code{df} parameters or from the skew-t if \code{extended = 0}.
+	If \code{shape = 0} and \code{extended = 0} then the t distribution is recovered.
  }
 
 \references{
@@ -40,14 +40,14 @@ Azzalini, A. with the collaboration of Capitanio, A. (2014).
 
 \examples{
 
-dens1 <- dest(x=1, shape=3, extended=2, df=1)
-dens2 <- dest(x=1, shape=3, df=1)
-dens3 <- dest(x=1, df=1)
-dens4 <- dt(x=1, df=1)
-prob1 <- pest(x=1, shape=3, extended=2, df=1)
-prob2 <- pest(x=1, shape=3, df=1)
-prob3 <- pest(x=1, df=1)
-prob4 <- pt(q=1, df=1)
+dens1 <- dest(x = 1, shape = 3, extended = 2, df = 1)
+dens2 <- dest(x = 1, shape = 3, df = 1)
+dens3 <- dest(x = 1, df = 1)
+dens4 <- dt(x = 1, df = 1)
+prob1 <- pest(x = 1, shape = 3, extended = 2, df = 1)
+prob2 <- pest(x = 1, shape = 3, df = 1)
+prob3 <- pest(x = 1, df = 1)
+prob4 <- pt(q = 1, df = 1)
 
 }
 
